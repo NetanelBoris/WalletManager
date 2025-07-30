@@ -8,5 +8,5 @@ data class AccountEntity(
     @PrimaryKey val id: String,
     val name: String,
     val balance: Double,
-    val type: String // We'll store enum as String
+    val type: String
 )

@@ -49,7 +49,7 @@ private fun TransactionEntity.toDomain(): Transaction {
         amount = amount,
         description = description,
         category = TransactionCategory.valueOf(category),
-        date = LocalDateTime.parse(date, formatter)  // <-- convert string to LocalDateTime
+        date = LocalDateTime.parse(date, formatter)
     )
 }
 
@@ -61,6 +61,6 @@ private fun Transaction.toEntity(): TransactionEntity {
         amount = amount,
         description = description,
         category = category.name,
-        date = date.format(formatter) // <-- convert LocalDateTime to string
+        date = date.format(formatter)
     )
 }

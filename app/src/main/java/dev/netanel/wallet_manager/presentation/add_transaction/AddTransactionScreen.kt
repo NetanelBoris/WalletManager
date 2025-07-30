@@ -66,7 +66,14 @@ fun AddTransactionScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
+            if (state.showError) {
+                Text(
+                    text = "Please enter a valid amount, description, and category.",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
             Button(
                 onClick = {
                     viewModel.onIntent(AddTransactionIntent.SubmitTransaction(accountId))
@@ -76,14 +83,7 @@ fun AddTransactionScreen(
                 Text("Save")
             }
 
-            if (state.showError) {
-                Text(
-                    text = "Please enter a valid amount, description, and category.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
+
         }
     }
 }

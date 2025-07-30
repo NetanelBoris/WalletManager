@@ -40,6 +40,7 @@ class AddTransactionViewModel @Inject constructor(
             is AddTransactionIntent.SubmitTransaction -> {
                 submitTransaction(intent.accountId)
             }
+
         }
     }
 
