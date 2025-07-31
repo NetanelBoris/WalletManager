@@ -19,25 +19,25 @@ class AddTransactionViewModel @Inject constructor(
     private val insertTransactionUseCase: InsertTransactionUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AddTransactionState())
-    val state: StateFlow<AddTransactionState> = _state
+    private val _state = MutableStateFlow(AddTransactionContract.AddTransactionState())
+    val state: StateFlow<AddTransactionContract.AddTransactionState> = _state
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onIntent(intent: AddTransactionIntent) {
+    fun onIntent(intent: AddTransactionContract.AddTransactionIntent) {
         when (intent) {
-            is AddTransactionIntent.SetAmount -> {
+            is AddTransactionContract.AddTransactionIntent.SetAmount -> {
                 _state.value = _state.value.copy(amount = intent.amount)
             }
 
-            is AddTransactionIntent.SetDescription -> {
+            is AddTransactionContract.AddTransactionIntent.SetDescription -> {
                 _state.value = _state.value.copy(description = intent.description)
             }
 
-            is AddTransactionIntent.SetCategory -> {
+            is AddTransactionContract.AddTransactionIntent.SetCategory -> {
                 _state.value = _state.value.copy(category = intent.category)
             }
 
-            is AddTransactionIntent.SubmitTransaction -> {
+            is AddTransactionContract.AddTransactionIntent.SubmitTransaction -> {
                 submitTransaction(intent.accountId)
             }
 
@@ -68,7 +68,7 @@ class AddTransactionViewModel @Inject constructor(
 
             insertTransactionUseCase(transaction)
 
-            _state.value = AddTransactionState(isSaved = true)
+            _state.value = AddTransactionContract.AddTransactionState(isSaved = true)
         }
     }
 }

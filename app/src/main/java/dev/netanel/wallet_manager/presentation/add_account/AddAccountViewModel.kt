@@ -18,21 +18,21 @@ class AddAccountViewModel @Inject constructor(
 ) : ViewModel()
  {
 
-    private val _state = MutableStateFlow(AddAccountState())
-    val state: StateFlow<AddAccountState> = _state
+    private val _state = MutableStateFlow(AddAccountContract.AddAccountState())
+    val state: StateFlow<AddAccountContract.AddAccountState> = _state
 
-    fun onIntent(intent: AddAccountIntent) {
+    fun onIntent(intent: AddAccountContract.AddAccountIntent) {
         when (intent) {
-            is AddAccountIntent.EnterName -> {
+            is AddAccountContract.AddAccountIntent.EnterName -> {
                 _state.value = _state.value.copy(name = intent.name)
             }
-            is AddAccountIntent.SelectType -> {
+            is AddAccountContract.AddAccountIntent.SelectType -> {
                 _state.value = _state.value.copy(type = AccountType.valueOf(intent.type))
             }
-            is AddAccountIntent.EnterBalance -> {
+            is AddAccountContract.AddAccountIntent.EnterBalance -> {
                 _state.value = _state.value.copy(balance = intent.balance)
             }
-            AddAccountIntent.SaveAccount -> {
+            AddAccountContract.AddAccountIntent.SaveAccount -> {
                 saveAccount()
             }
         }

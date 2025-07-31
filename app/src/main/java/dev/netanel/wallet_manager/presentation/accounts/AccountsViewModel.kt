@@ -15,35 +15,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountsViewModel @Inject constructor(
-    private val getAccountsUseCase: GetAccountsUseCase,
-    private val getTotalBalanceUseCase: GetTotalBalanceUseCase,
-    private val insertAccountUseCase: InsertAccountUseCase,
-    private val deleteAccountUseCase: DeleteAccountUseCase
+    private val accountUseCases: AccountUseCases,
+
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AccountsState())
-    val state: StateFlow<AccountsState> = _state
+    private val _state = MutableStateFlow(AccountsContract.AccountsState())
+    val state: StateFlow<AccountsContract.AccountsState> = _state
 
-    fun onIntent(intent: AccountsIntent) {
+    fun onIntent(intent: AccountsContract.AccountsIntent) {
         when (intent) {
-            is AccountsIntent.LoadAccounts -> loadAccounts()
-            is AccountsIntent.DeleteAccount -> deleteAccount(intent.id)
-            is AccountsIntent.AddAccount -> addAccount(intent.name, intent.type, intent.balance)
+            is AccountsContract.AccountsIntent.LoadAccounts -> loadAccounts()
+            is AccountsContract.AccountsIntent.DeleteAccount -> deleteAccount(intent.id)
+            is AccountsContract.AccountsIntent.AddAccount -> addAccount(intent.name, intent.type, intent.balance)
         }
     }
 
     private fun loadAccounts() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
-
             launch {
-                getAccountsUseCase().collectLatest { accounts ->
+                accountUseCases.getAccounts().collectLatest { accounts ->
                     _state.value = _state.value.copy(accounts = accounts, isLoading = false)
                 }
             }
 
             launch {
-                getTotalBalanceUseCase().collectLatest { total ->
+                accountUseCases.getTotalBalance().collectLatest { total ->
                     _state.value = _state.value.copy(totalBalance = total)
                 }
             }
@@ -53,7 +50,7 @@ class AccountsViewModel @Inject constructor(
     private fun deleteAccount(id: String) {
         viewModelScope.launch {
             val account = state.value.accounts.find { it.id == id } ?: return@launch
-            deleteAccountUseCase(account)
+            accountUseCases.deleteAccount(account)
         }
     }
 
@@ -65,7 +62,7 @@ class AccountsViewModel @Inject constructor(
                 type = AccountType.valueOf(type),
                 balance = balance
             )
-            insertAccountUseCase(account)
+            accountUseCases.insertAccount(account)
         }
     }
 }

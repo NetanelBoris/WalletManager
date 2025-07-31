@@ -25,7 +25,7 @@ fun AccountDetailsScreen(
 
     // Trigger load
     LaunchedEffect(Unit) {
-        viewModel.onIntent(AccountDetailsIntent.LoadAccountDetails(accountId))
+        viewModel.onIntent(AccountDetailsContract.AccountDetailsIntent.LoadAccountDetails(accountId))
     }
 
     Scaffold(

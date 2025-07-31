@@ -13,15 +13,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TransactionsViewModel @Inject constructor(
-    private val transactionUseCases: TransactionUseCases,private val accountUseCases: AccountUseCases
+    private val transactionUseCases: TransactionUseCases,
+    private val accountUseCases: AccountUseCases
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(TransactionsState())
-    val state: StateFlow<TransactionsState> = _state
+    private val _state = MutableStateFlow(TransactionsContract.TransactionsState())
+    val state: StateFlow<TransactionsContract.TransactionsState> = _state
 
-    fun onIntent(intent: TransactionsIntent) {
+    fun onIntent(intent: TransactionsContract.TransactionsIntent) {
         when (intent) {
-            is TransactionsIntent.LoadAll -> {
+            is TransactionsContract.TransactionsIntent.LoadAll -> {
                 viewModelScope.launch {
                     val allTransactions = transactionUseCases.getAllTransactions().first()
                     _state.value = _state.value.copy(
@@ -32,27 +33,26 @@ class TransactionsViewModel @Inject constructor(
                 }
             }
 
-            is TransactionsIntent.SelectAccount -> {
+            is TransactionsContract.TransactionsIntent.SelectAccount -> {
                 _state.value = _state.value.copy(selectedAccountId = intent.accountId)
                 applyFilters()
             }
 
-            is TransactionsIntent.FilterByCategory -> {
+            is TransactionsContract.TransactionsIntent.FilterByCategory -> {
                 _state.value = _state.value.copy(selectedCategory = intent.category)
                 applyFilters()
             }
 
-            is TransactionsIntent.FilterByAccount -> {
+            is TransactionsContract.TransactionsIntent.FilterByAccount -> {
                 _state.value = _state.value.copy(selectedAccountId = intent.accountId)
                 applyFilters()
             }
 
-            TransactionsIntent.LoadTransactions -> {
+            TransactionsContract.TransactionsIntent.LoadTransactions -> {
                 loadTransactions()
             }
         }
     }
-
 
 
     private fun loadTransactions() {
@@ -75,8 +75,6 @@ class TransactionsViewModel @Inject constructor(
             }
         }
     }
-
-
 
 
     private fun applyFilters() {

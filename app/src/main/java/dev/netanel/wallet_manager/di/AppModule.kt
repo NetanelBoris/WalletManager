@@ -8,8 +8,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.netanel.wallet_manager.data.local.dao.AccountDao
 import dev.netanel.wallet_manager.data.local.dao.TransactionDao
-import dev.netanel.wallet_manager.data.repository.AccountRepositoryImpl
-import dev.netanel.wallet_manager.data.repository.TransactionRepositoryImpl
+import dev.netanel.wallet_manager.data.repositories.AccountRepositoryImpl
+import dev.netanel.wallet_manager.data.repositories.TransactionRepositoryImpl
 import dev.netanel.wallet_manager.domain.repositories.AccountRepository
 import dev.netanel.wallet_manager.domain.repositories.TransactionRepository
 import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases

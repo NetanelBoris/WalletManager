@@ -19,12 +19,12 @@ class AccountDetailsViewModel @Inject constructor(
     private val getTransactionsForAccountUseCase: GetTransactionsForAccountUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AccountDetailsState())
-    val state: StateFlow<AccountDetailsState> = _state
+    private val _state = MutableStateFlow(AccountDetailsContract.AccountDetailsState())
+    val state: StateFlow<AccountDetailsContract.AccountDetailsState> = _state
 
-    fun onIntent(intent: AccountDetailsIntent) {
+    fun onIntent(intent: AccountDetailsContract.AccountDetailsIntent) {
         when (intent) {
-            is AccountDetailsIntent.LoadAccountDetails -> {
+            is AccountDetailsContract.AccountDetailsIntent.LoadAccountDetails -> {
                 loadDetails(intent.accountId)
             }
         }

@@ -1,7 +1,7 @@
 // File: data/mappers/AccountMappers.kt
 package dev.netanel.wallet_manager.data.mappers
 
-import dev.netanel.wallet_manager.data.local.entity.AccountEntity
+import dev.netanel.wallet_manager.data.local.entities.AccountEntity
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
 

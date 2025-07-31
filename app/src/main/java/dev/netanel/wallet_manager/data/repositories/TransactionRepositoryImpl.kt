@@ -1,9 +1,9 @@
-package dev.netanel.wallet_manager.data.repository
+package dev.netanel.wallet_manager.data.repositories
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import dev.netanel.wallet_manager.data.local.dao.TransactionDao
-import dev.netanel.wallet_manager.data.local.entity.TransactionEntity
+import dev.netanel.wallet_manager.data.local.entities.TransactionEntity
 import dev.netanel.wallet_manager.domain.models.Transaction
 import dev.netanel.wallet_manager.domain.models.enums.TransactionCategory
 import dev.netanel.wallet_manager.domain.repositories.TransactionRepository

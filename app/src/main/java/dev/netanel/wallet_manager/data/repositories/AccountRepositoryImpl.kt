@@ -1,10 +1,10 @@
-package dev.netanel.wallet_manager.data.repository
+package dev.netanel.wallet_manager.data.repositories
 
 import dev.netanel.wallet_manager.data.local.dao.AccountDao
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
 import dev.netanel.wallet_manager.domain.repositories.AccountRepository
-import dev.netanel.wallet_manager.data.local.entity.AccountEntity
+import dev.netanel.wallet_manager.data.local.entities.AccountEntity
 import dev.netanel.wallet_manager.data.mappers.toAccount
 import dev.netanel.wallet_manager.data.mappers.toAccountEntity
 import kotlinx.coroutines.flow.Flow

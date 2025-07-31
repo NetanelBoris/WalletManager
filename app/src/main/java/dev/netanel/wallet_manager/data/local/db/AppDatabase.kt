@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import dev.netanel.wallet_manager.data.local.dao.AccountDao
 import dev.netanel.wallet_manager.data.local.dao.TransactionDao
-import dev.netanel.wallet_manager.data.local.entity.AccountEntity
-import dev.netanel.wallet_manager.data.local.entity.TransactionEntity
+import dev.netanel.wallet_manager.data.local.entities.AccountEntity
+import dev.netanel.wallet_manager.data.local.entities.TransactionEntity
 
 @Database(
     entities = [AccountEntity::class, TransactionEntity::class],

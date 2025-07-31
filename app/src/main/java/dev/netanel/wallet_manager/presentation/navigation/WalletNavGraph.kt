@@ -14,6 +14,7 @@ import dev.netanel.wallet_manager.presentation.add_account.AddAccountScreen
 import dev.netanel.wallet_manager.presentation.account_details.AccountDetailsScreen
 import dev.netanel.wallet_manager.presentation.add_transaction.AddTransactionScreen
 import dev.netanel.wallet_manager.presentation.navigation.Routes.ACCOUNTS
+import dev.netanel.wallet_manager.presentation.navigation.Routes.TRANSACTIONS
 import dev.netanel.wallet_manager.presentation.transactions.TransactionsScreen
 
 object Routes {
@@ -60,7 +61,7 @@ fun WalletNavGraph(
         composable(ACCOUNTS) {
             AccountsScreen(navController = navController)
         }
-        composable("transactions") {
+        composable(TRANSACTIONS) {
 // In your NavGraph or wherever you call the screen:
             TransactionsScreen()
         }

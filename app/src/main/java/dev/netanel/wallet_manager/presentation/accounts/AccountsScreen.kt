@@ -40,14 +40,13 @@ import dev.netanel.wallet_manager.presentation.navigation.accountDetailsRoute
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountsScreen(
-    navController: NavController, // 👈 Add this!
+    navController: NavController,
     viewModel: AccountsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
-    // Trigger loading once
     LaunchedEffect(Unit) {
-        viewModel.onIntent(AccountsIntent.LoadAccounts)
+        viewModel.onIntent(AccountsContract.AccountsIntent.LoadAccounts)
     }
 
     Scaffold(
@@ -79,10 +78,10 @@ fun AccountsScreen(
                     AccountCard(
                         account = account,
                         onClick = {
-                            navController.navigate(accountDetailsRoute(account.id)) // ✅ cleaner & safer
+                            navController.navigate(accountDetailsRoute(account.id))
                         },
                         onDelete = {
-                            viewModel.onIntent(AccountsIntent.DeleteAccount(it.id))
+                            viewModel.onIntent(AccountsContract.AccountsIntent.DeleteAccount(it.id))
                         }
                     )
                 }
@@ -91,13 +90,14 @@ fun AccountsScreen(
         }
     }
 }
+
 @Composable
 fun AccountCard(account: Account, onClick: () -> Unit, onDelete: (Account) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() }, // 👈 Make card clickable
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Row(

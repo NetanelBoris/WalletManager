@@ -1,4 +1,4 @@
-package dev.netanel.wallet_manager.data.local.entity
+package dev.netanel.wallet_manager.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

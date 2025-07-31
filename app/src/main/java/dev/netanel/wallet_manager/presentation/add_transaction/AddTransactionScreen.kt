@@ -43,7 +43,7 @@ fun AddTransactionScreen(
         ) {
             OutlinedTextField(
                 value = state.amount,
-                onValueChange = { viewModel.onIntent(AddTransactionIntent.SetAmount(it)) },
+                onValueChange = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetAmount(it)) },
                 label = { Text("Amount") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -53,7 +53,7 @@ fun AddTransactionScreen(
 
             OutlinedTextField(
                 value = state.description,
-                onValueChange = { viewModel.onIntent(AddTransactionIntent.SetDescription(it)) },
+                onValueChange = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetDescription(it)) },
                 label = { Text("Description") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -62,7 +62,7 @@ fun AddTransactionScreen(
 
             TransactionCategoryDropdown(
                 selected = state.category,
-                onSelect = { viewModel.onIntent(AddTransactionIntent.SetCategory(it)) }
+                onSelect = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetCategory(it)) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -76,7 +76,7 @@ fun AddTransactionScreen(
             }
             Button(
                 onClick = {
-                    viewModel.onIntent(AddTransactionIntent.SubmitTransaction(accountId))
+                    viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SubmitTransaction(accountId))
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {

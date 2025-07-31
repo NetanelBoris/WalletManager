@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import dev.netanel.wallet_manager.data.local.entity.AccountEntity
+import dev.netanel.wallet_manager.data.local.entities.AccountEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

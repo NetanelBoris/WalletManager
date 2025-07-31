@@ -12,13 +12,11 @@ import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.Transaction
 import dev.netanel.wallet_manager.domain.models.enums.TransactionCategory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
-
     LaunchedEffect(Unit) {
-        viewModel.onIntent(TransactionsIntent.LoadTransactions)
+        viewModel.onIntent(TransactionsContract.TransactionsIntent.LoadTransactions)
     }
 
     Column(
@@ -26,7 +24,6 @@ fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // 🔽 Filters side-by-side
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -34,32 +31,30 @@ fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
             AccountFilterDropdown(
                 accounts = state.accounts,
                 selectedAccountId = state.selectedAccountId,
-                onAccountChange = {
-                    viewModel.onIntent(TransactionsIntent.FilterByAccount(it))
-                }
+                onAccountChange = { viewModel.onIntent(TransactionsContract.TransactionsIntent.FilterByAccount(it)) }
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             CategoryFilterDropdown(
                 selectedCategory = state.selectedCategory,
-                onCategoryChange = {
-                    viewModel.onIntent(TransactionsIntent.FilterByCategory(it))
-                }
+                onCategoryChange = { viewModel.onIntent(TransactionsContract.TransactionsIntent.FilterByCategory(it)) }
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        // 🔽 Content
-        if (state.isLoading) {
-            CircularProgressIndicator()
-        } else if (state.filteredTransactions.isEmpty()) {
-            Text("No transactions found.")
-        } else {
-            LazyColumn {
-                items(state.filteredTransactions) { transaction ->
-                    TransactionCard(transaction)
+        when {
+            state.isLoading -> {
+                CircularProgressIndicator()
+            }
+            state.filteredTransactions.isEmpty() -> {
+                Text("No transactions found.")
+            }
+            else -> {
+                LazyColumn {
+                    items(state.filteredTransactions) { transaction ->
+                        TransactionCard(transaction)
+                    }
                 }
             }
         }
@@ -113,7 +108,10 @@ fun CategoryFilterDropdown(
         OutlinedButton(onClick = { expanded = true }) {
             Text(selectedCategory?.name ?: "All")
         }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
             DropdownMenuItem(
                 text = { Text("All") },
                 onClick = {

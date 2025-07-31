@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
-import dev.netanel.wallet_manager.presentation.accounts.AccountsIntent
+import dev.netanel.wallet_manager.presentation.accounts.AccountsContract
 import dev.netanel.wallet_manager.presentation.accounts.AccountsViewModel
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 
@@ -74,7 +74,7 @@ fun AddAccountScreen(
                 onClick = {
                     if (isFormValid) {
                         viewModel.onIntent(
-                            AccountsIntent.AddAccount(
+                            AccountsContract.AccountsIntent.AddAccount(
                                 name = name,
                                 type = type.name,
                                 balance = balance.toDouble()
