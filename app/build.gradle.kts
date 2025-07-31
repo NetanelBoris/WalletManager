@@ -86,7 +86,16 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
+    testImplementation("app.cash.turbine:turbine:0.12.1")
+// for testing Flows
+    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("org.slf4j:slf4j-simple:2.0.9")
+// or Mockito
+    testImplementation(kotlin("test"))
+
 }
