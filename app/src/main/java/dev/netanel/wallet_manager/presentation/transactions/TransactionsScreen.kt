@@ -119,7 +119,7 @@ fun CategoryFilterDropdown(
                     expanded = false
                 }
             )
-            TransactionCategory.values().forEach { category ->
+            TransactionCategory.entries.forEach { category ->
                 DropdownMenuItem(
                     text = { Text(category.name) },
                     onClick = {

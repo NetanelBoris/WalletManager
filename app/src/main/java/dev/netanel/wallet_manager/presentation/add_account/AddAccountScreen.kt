@@ -99,7 +99,7 @@ fun DropdownMenuTypeSelector(
             Text("Type: ${selected.name}")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            AccountType.values().forEach {
+            AccountType.entries.forEach {
                 DropdownMenuItem(
                     text = { Text(it.name) },
                     onClick = {
