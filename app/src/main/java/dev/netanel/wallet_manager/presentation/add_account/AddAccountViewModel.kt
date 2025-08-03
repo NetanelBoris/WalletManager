@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
+import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases
 import dev.netanel.wallet_manager.domain.usecases.account.InsertAccountUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddAccountViewModel @Inject constructor(
     private val insertAccountUseCase: InsertAccountUseCase
-) : ViewModel()
+
+    ) : ViewModel()
  {
 
     private val _state = MutableStateFlow(AddAccountContract.AddAccountState())
@@ -32,28 +34,23 @@ class AddAccountViewModel @Inject constructor(
             is AddAccountContract.AddAccountIntent.EnterBalance -> {
                 _state.value = _state.value.copy(balance = intent.balance)
             }
-            AddAccountContract.AddAccountIntent.SaveAccount -> {
-                saveAccount()
+            is AddAccountContract.AddAccountIntent.ShowError->{
+                _state.value=_state.value.copy(showError = intent.showError)
             }
+            is AddAccountContract.AddAccountIntent.AddAccount -> addAccount()
+
         }
     }
 
-    private fun saveAccount() {
-        val current = _state.value
-        val balance = current.balance.toDoubleOrNull() ?: 0.0
-
-        viewModelScope.launch {
-            _state.value = current.copy(isSaving = true)
-            insertAccountUseCase(
-                Account(
-                    id = UUID.randomUUID().toString(),
-                    name = current.name,
-                    type = AccountType.valueOf(current.type.toString()),
-                    balance = balance
-                )
-            )
-
-            _state.value = current.copy(isSaving = false)
-        }
-    }
+     private fun addAccount() {
+         viewModelScope.launch {
+             val account = Account(
+                 id = UUID.randomUUID().toString(),
+                 name = _state.value.name,
+                 type = AccountType.valueOf(_state.value.type.toString()),
+                 balance = _state.value.balance.toDouble()
+             )
+             insertAccountUseCase.invoke(account)
+         }
+     }
 }

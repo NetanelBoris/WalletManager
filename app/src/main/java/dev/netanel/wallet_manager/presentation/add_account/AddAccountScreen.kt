@@ -11,22 +11,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
-import dev.netanel.wallet_manager.presentation.accounts.AccountsContract
-import dev.netanel.wallet_manager.presentation.accounts.AccountsViewModel
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddAccountScreen(
     navController: NavController,
-    viewModel: AccountsViewModel = hiltViewModel()
+    viewModel: AddAccountViewModel = hiltViewModel()
 ) {
-    var name by remember { mutableStateOf("") }
-    var type by remember { mutableStateOf(AccountType.CHECKING) }
-    var balance by remember { mutableStateOf("") }
-    var showError by remember { mutableStateOf(false) }
 
-    val isFormValid = name.isNotBlank() && balance.toDoubleOrNull() != null
+    val state by viewModel.state.collectAsState()
+    val isFormValid = state.name.isNotBlank() && state.balance.toDoubleOrNull() != null
+
 
     Scaffold(
         topBar = {
@@ -39,27 +35,27 @@ fun AddAccountScreen(
                 .padding(16.dp)
         ) {
             OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+                value = state.name,
+                onValueChange = { viewModel.onIntent(AddAccountContract.AddAccountIntent.EnterName(it)) },
                 label = { Text("Account Name") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            DropdownMenuTypeSelector(selected = type, onSelect = { type = it })
+            DropdownMenuTypeSelector(selected = state.type, onSelect = { viewModel.onIntent(AddAccountContract.AddAccountIntent.SelectType(it.name)) })
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
-                value = balance,
-                onValueChange = { balance = it },
+                value = state.balance,
+                onValueChange = { viewModel.onIntent(AddAccountContract.AddAccountIntent.EnterBalance(it)) },
                 label = { Text("Initial Balance") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if (showError && !isFormValid) {
+            if (state.showError && !isFormValid) {
                 Text(
                     text = "Please fill all fields correctly.",
                     color = MaterialTheme.colorScheme.error,
@@ -74,17 +70,13 @@ fun AddAccountScreen(
                 onClick = {
                     if (isFormValid) {
                         viewModel.onIntent(
-                            AccountsContract.AccountsIntent.AddAccount(
-                                name = name,
-                                type = type.name,
-                                balance = balance.toDouble()
-                            )
+                            AddAccountContract.AddAccountIntent.AddAccount
                         )
                         navController.navigate(Routes.ACCOUNTS) {
                             popUpTo(Routes.ACCOUNTS) { inclusive = true }
                         }
                     } else {
-                        showError = true
+                       viewModel.onIntent(AddAccountContract.AddAccountIntent.ShowError(true))
                     }
                 },
                 modifier = Modifier.align(Alignment.End)

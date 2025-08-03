@@ -7,7 +7,10 @@ class AddAccountContract {
         data class EnterName(val name: String) : AddAccountIntent()
         data class SelectType(val type: String) : AddAccountIntent()
         data class EnterBalance(val balance: String) : AddAccountIntent()
-        object SaveAccount : AddAccountIntent()
+        data class ShowError(val showError:Boolean) : AddAccountIntent()
+
+        object AddAccount :
+            AddAccountIntent()
     }
 
     data class AddAccountState(
@@ -15,6 +18,7 @@ class AddAccountContract {
         val type: AccountType = AccountType.CHECKING,
         val balance: String = "",
         val isSaving: Boolean = false,
-        val errorMessage: String? = null
+        val errorMessage: String? = null,
+        val showError: Boolean=false
     )
 }

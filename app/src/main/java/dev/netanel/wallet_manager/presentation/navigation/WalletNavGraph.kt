@@ -22,7 +22,7 @@ object Routes {
     const val ADD_ACCOUNT = "add_account"
     const val ACCOUNT_DETAILS = "account_details/{accountId}"
     const val ADD_TRANSACTION = "add_transaction/{accountId}"
-    const val TRANSACTIONS ="transactions";
+    const val TRANSACTIONS = "transactions";
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -35,7 +35,7 @@ fun WalletNavGraph(
         navController = navController,
         startDestination = Routes.ACCOUNTS,
         modifier = modifier
-    )  {
+    ) {
         composable(Routes.ACCOUNTS) {
             AccountsScreen(navController = navController)
         }
@@ -62,7 +62,6 @@ fun WalletNavGraph(
             AccountsScreen(navController = navController)
         }
         composable(TRANSACTIONS) {
-// In your NavGraph or wherever you call the screen:
             TransactionsScreen()
         }
 

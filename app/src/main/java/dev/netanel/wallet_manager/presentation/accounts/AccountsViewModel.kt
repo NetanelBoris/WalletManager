@@ -26,7 +26,6 @@ class AccountsViewModel @Inject constructor(
         when (intent) {
             is AccountsContract.AccountsIntent.LoadAccounts -> loadAccounts()
             is AccountsContract.AccountsIntent.DeleteAccount -> deleteAccount(intent.id)
-            is AccountsContract.AccountsIntent.AddAccount -> addAccount(intent.name, intent.type, intent.balance)
         }
     }
 
@@ -54,15 +53,5 @@ class AccountsViewModel @Inject constructor(
         }
     }
 
-    private fun addAccount(name: String, type: String, balance: Double) {
-        viewModelScope.launch {
-            val account = Account(
-                id = UUID.randomUUID().toString(),
-                name = name,
-                type = AccountType.valueOf(type),
-                balance = balance
-            )
-            accountUseCases.insertAccount(account)
-        }
-    }
+
 }

@@ -23,14 +23,11 @@ fun AddTransactionScreen(
     viewModel: AddTransactionViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
-    // Navigate back after successful save
     if (state.isSaved) {
         LaunchedEffect(Unit) {
             navController.popBackStack()
         }
     }
-
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Add Transaction") })
@@ -50,7 +47,6 @@ fun AddTransactionScreen(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-
             OutlinedTextField(
                 value = state.description,
                 onValueChange = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetDescription(it)) },
@@ -103,7 +99,7 @@ fun TransactionCategoryDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            TransactionCategory.values().forEach { category ->
+            TransactionCategory.entries.forEach { category ->
                 DropdownMenuItem(
                     text = { Text(category.name) },
                     onClick = {
