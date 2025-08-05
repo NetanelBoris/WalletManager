@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
 import dev.netanel.wallet_manager.domain.repositories.AccountRepository
+import dev.netanel.wallet_manager.domain.usecases.account.GetAccountsUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

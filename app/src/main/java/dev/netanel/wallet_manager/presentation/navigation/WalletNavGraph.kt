@@ -15,6 +15,7 @@ import dev.netanel.wallet_manager.presentation.account_details.AccountDetailsScr
 import dev.netanel.wallet_manager.presentation.add_transaction.AddTransactionScreen
 import dev.netanel.wallet_manager.presentation.navigation.Routes.ACCOUNTS
 import dev.netanel.wallet_manager.presentation.navigation.Routes.TRANSACTIONS
+import dev.netanel.wallet_manager.presentation.registration.RegistrationScreen
 import dev.netanel.wallet_manager.presentation.transactions.TransactionsScreen
 
 object Routes {
@@ -23,6 +24,7 @@ object Routes {
     const val ACCOUNT_DETAILS = "account_details/{accountId}"
     const val ADD_TRANSACTION = "add_transaction/{accountId}"
     const val TRANSACTIONS = "transactions";
+    const val REGISTRATION ="registration"
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -33,9 +35,12 @@ fun WalletNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.ACCOUNTS,
+        startDestination = Routes.REGISTRATION,
         modifier = modifier
     ) {
+        composable(Routes.REGISTRATION) {
+            RegistrationScreen(navController = navController)
+        }
         composable(Routes.ACCOUNTS) {
             AccountsScreen(navController = navController)
         }

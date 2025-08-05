@@ -38,6 +38,7 @@ class AccountsViewModel @Inject constructor(
                 }
             }
 
+
             launch {
                 accountUseCases.getTotalBalance().collectLatest { total ->
                     _state.value = _state.value.copy(totalBalance = total)

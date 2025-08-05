@@ -68,7 +68,7 @@ class AddTransactionViewModel @Inject constructor(
 
             insertTransactionUseCase(transaction)
 
-            _state.value = AddTransactionContract.AddTransactionState(isSaved = true)
+            _state.value = currentState.copy(isSaved = true)
         }
     }
 }

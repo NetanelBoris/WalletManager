@@ -10,3 +10,5 @@ data class AccountEntity(
     val balance: Double,
     val type: String
 )
+
+
