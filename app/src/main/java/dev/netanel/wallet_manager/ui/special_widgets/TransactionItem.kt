@@ -1,4 +1,4 @@
-package dev.netanel.wallet_manager.presentation.account_details
+package dev.netanel.wallet_manager.ui.special_widgets
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.netanel.wallet_manager.domain.models.Transaction
+import dev.netanel.wallet_manager.domain.models.enums.TransactionCategory
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -31,9 +32,14 @@ fun TransactionItem(transaction: Transaction) {
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text("Amount: $${transaction.amount}")
-            Text("Category: ${transaction.category}")
             Text("Date: ${transaction.date.format(formatter)}")
+            Text("Category: ${transaction.category}")
+            if (transaction.category == TransactionCategory.SEND_MONEY_BY_MAIL) {
+                Text("Source: ${transaction.sourceMail}")
+                Text("Destination: ${transaction.destinationMail}")
+            }
+            Text("Amount: $${transaction.amount}")
+            Text("Description: ${transaction.description}")
         }
     }
 }

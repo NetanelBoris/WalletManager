@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +25,7 @@ fun AddTransactionScreen(
 ) {
     val state by viewModel.state.collectAsState()
     if (state.isSaved) {
-            navController.popBackStack()
+        navController.popBackStack()
     }
     Scaffold(
         topBar = {
@@ -38,7 +39,13 @@ fun AddTransactionScreen(
         ) {
             OutlinedTextField(
                 value = state.amount,
-                onValueChange = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetAmount(it)) },
+                onValueChange = {
+                    viewModel.onIntent(
+                        AddTransactionContract.AddTransactionIntent.SetAmount(
+                            it
+                        )
+                    )
+                },
                 label = { Text("Amount") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -47,7 +54,13 @@ fun AddTransactionScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = state.description,
-                onValueChange = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetDescription(it)) },
+                onValueChange = {
+                    viewModel.onIntent(
+                        AddTransactionContract.AddTransactionIntent.SetDescription(
+                            it
+                        )
+                    )
+                },
                 label = { Text("Description") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -56,21 +69,61 @@ fun AddTransactionScreen(
 
             TransactionCategoryDropdown(
                 selected = state.category,
-                onSelect = { viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SetCategory(it)) }
+                onSelect = {
+                    viewModel.onIntent(
+                        AddTransactionContract.AddTransactionIntent.SetCategory(
+                            it
+                        )
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            if (state.showError) {
-                Text(
-                    text = "Please enter a valid amount, description, and category.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp)
+
+            if (state.category == TransactionCategory.SEND_MONEY_BY_MAIL) {
+                OutlinedTextField(
+                    value = state.destinationMail.toString(),
+                    onValueChange = {
+                        viewModel.onIntent(
+                            AddTransactionContract.AddTransactionIntent.SetDestinationMail(
+                                it
+                            )
+                        )
+                    },
+                    label = { Text("Destination Mail") },
+                    modifier = Modifier.fillMaxWidth()
                 )
+                if (state.showMailNotValidError) {
+                    Text("Invalid email format", color = Color.Red)
+
+                }
+
+
             }
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+            if (state.showUserNotExistError) {
+                Text("This destination user does not exist", color = Color.Red)
+
+
+            }
+            if (state.showError) {
+                Text("Please make sure all fields are valid", color = Color.Red)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+
+
             Button(
                 onClick = {
-                    viewModel.onIntent(AddTransactionContract.AddTransactionIntent.SubmitTransaction(accountId))
+                    viewModel.onIntent(
+                        AddTransactionContract.AddTransactionIntent.SubmitTransaction(
+                            accountId
+                        )
+                    )
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {
@@ -97,15 +150,18 @@ fun TransactionCategoryDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            TransactionCategory.entries.forEach { category ->
-                DropdownMenuItem(
-                    text = { Text(category.name) },
-                    onClick = {
-                        onSelect(category)
-                        expanded = false
-                    }
-                )
-            }
+            TransactionCategory.entries
+                
+                .forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(category.name) },
+                        onClick = {
+                            onSelect(category)
+                            expanded = false
+                        }
+                    )
+                }
+
         }
     }
 }

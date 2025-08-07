@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.netanel.wallet_manager.presentation.navigation.addTransactionRoute
+import dev.netanel.wallet_manager.ui.special_widgets.TransactionItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)

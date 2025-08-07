@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.AppUser
+import dev.netanel.wallet_manager.domain.models.enums.AccountType
+import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases
 import dev.netanel.wallet_manager.domain.usecases.appUser.AppUserUseCases
 import dev.netanel.wallet_manager.presentation.utilities.Validator
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val appUserUseCases: AppUserUseCases
+    private val appUserUseCases: AppUserUseCases,
+    private val accountUseCases: AccountUseCases
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegistrationContract.RegistrationState())
@@ -100,15 +104,24 @@ class RegistrationViewModel @Inject constructor(
             )
             val isUserExist: Boolean = appUserUseCases.userExistsUseCase(appUser.mail)
             if (isUserExist)
-                _state.value = _state.value.copy(showUserAlreadyExistError = true,isRegistering = false)
+                _state.value =
+                    _state.value.copy(showUserAlreadyExistError = true, isRegistering = false)
             else {
                 appUserUseCases.insertAppUserUseCase(appUser)
-
+                val account = Account(
+                    id = state.mail + ".#incomes",
+                    name = "Incomes",
+                    balance = 0.0,
+                    type = AccountType.EXTERNAL_INCOMES,
+                    managerMail = state.mail
+                )
+                accountUseCases.insertAccount(account)
                 _state.value = _state.value.copy(
                     isRegistered = true,
                     isRegistering = false,
                     appUser = appUser
                 )
+
             }
         }
     }

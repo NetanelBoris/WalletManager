@@ -1,5 +1,7 @@
 package dev.netanel.wallet_manager.presentation.transactions
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +13,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.Transaction
 import dev.netanel.wallet_manager.domain.models.enums.TransactionCategory
+import dev.netanel.wallet_manager.ui.special_widgets.TransactionItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
@@ -31,14 +35,26 @@ fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
             AccountFilterDropdown(
                 accounts = state.accounts,
                 selectedAccountId = state.selectedAccountId,
-                onAccountChange = { viewModel.onIntent(TransactionsContract.TransactionsIntent.FilterByAccount(it)) }
+                onAccountChange = {
+                    viewModel.onIntent(
+                        TransactionsContract.TransactionsIntent.FilterByAccount(
+                            it
+                        )
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             CategoryFilterDropdown(
                 selectedCategory = state.selectedCategory,
-                onCategoryChange = { viewModel.onIntent(TransactionsContract.TransactionsIntent.FilterByCategory(it)) }
+                onCategoryChange = {
+                    viewModel.onIntent(
+                        TransactionsContract.TransactionsIntent.FilterByCategory(
+                            it
+                        )
+                    )
+                }
             )
         }
 
@@ -47,13 +63,15 @@ fun TransactionsScreen(viewModel: TransactionsViewModel = hiltViewModel()) {
             state.isLoading -> {
                 CircularProgressIndicator()
             }
+
             state.filteredTransactions.isEmpty() -> {
                 Text("No transactions found.")
             }
+
             else -> {
                 LazyColumn {
                     items(state.filteredTransactions) { transaction ->
-                        TransactionCard(transaction)
+                        TransactionItem(transaction)
                     }
                 }
             }
@@ -128,23 +146,6 @@ fun CategoryFilterDropdown(
                     }
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun TransactionCard(transaction: Transaction) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        elevation = CardDefaults.cardElevation(2.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Amount: $${transaction.amount}")
-            Text("Description: ${transaction.description}")
-            Text("Category: ${transaction.category.name}")
-            Text("Date: ${transaction.date}")
         }
     }
 }

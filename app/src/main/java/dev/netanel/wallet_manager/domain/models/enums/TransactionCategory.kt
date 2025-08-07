@@ -6,5 +6,6 @@ enum class TransactionCategory {
     ENTERTAINMENT,
     UTILITIES,
     SALARY,
+    SEND_MONEY_BY_MAIL,
     OTHER
 }

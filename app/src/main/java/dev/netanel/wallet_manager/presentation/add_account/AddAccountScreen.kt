@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
+import dev.netanel.wallet_manager.domain.models.enums.TransactionCategory
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,20 +37,34 @@ fun AddAccountScreen(
         ) {
             OutlinedTextField(
                 value = state.name,
-                onValueChange = { viewModel.onIntent(AddAccountContract.AddAccountIntent.EnterName(it)) },
+                onValueChange = {
+                    viewModel.onIntent(
+                        AddAccountContract.AddAccountIntent.EnterName(
+                            it
+                        )
+                    )
+                },
                 label = { Text("Account Name") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            DropdownMenuTypeSelector(selected = state.type, onSelect = { viewModel.onIntent(AddAccountContract.AddAccountIntent.SelectType(it.name)) })
+            DropdownMenuTypeSelector(
+                selected = state.type,
+                onSelect = { viewModel.onIntent(AddAccountContract.AddAccountIntent.SelectType(it.name)) })
 
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = state.balance,
-                onValueChange = { viewModel.onIntent(AddAccountContract.AddAccountIntent.EnterBalance(it)) },
+                onValueChange = {
+                    viewModel.onIntent(
+                        AddAccountContract.AddAccountIntent.EnterBalance(
+                            it
+                        )
+                    )
+                },
                 label = { Text("Initial Balance") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -75,7 +90,7 @@ fun AddAccountScreen(
                         navController.popBackStack()
 
                     } else {
-                       viewModel.onIntent(AddAccountContract.AddAccountIntent.ShowError(true))
+                        viewModel.onIntent(AddAccountContract.AddAccountIntent.ShowError(true))
                     }
                 },
                 modifier = Modifier.align(Alignment.End)
@@ -98,7 +113,7 @@ fun DropdownMenuTypeSelector(
             Text("Type: ${selected.name}")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            AccountType.entries.forEach {
+            AccountType.entries.filter { it != AccountType.EXTERNAL_INCOMES }.forEach {
                 DropdownMenuItem(
                     text = { Text(it.name) },
                     onClick = {
