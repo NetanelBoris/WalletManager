@@ -1,5 +1,7 @@
 package dev.netanel.wallet_manager.presentation.registration
 
+import dev.netanel.wallet_manager.domain.models.AppUser
+
 object RegistrationContract {
 
     sealed class RegistrationIntent {
@@ -22,9 +24,6 @@ object RegistrationContract {
 
 
         object RegisterUser : RegistrationIntent()
-        object ValidateEmailFormat : RegistrationIntent()
-        object ValidatePasswordFormat : RegistrationIntent()
-        object ValidatePasswordEquality : RegistrationIntent()
 
 
     }
@@ -42,7 +41,9 @@ object RegistrationContract {
         val showMailFormatError: Boolean = false,
         val showPasswordFormatError: Boolean = false,
         val showPasswordEqualityError: Boolean = false,
-        val showEmptyFieldsError: Boolean = false
+        val showEmptyFieldsError: Boolean = false,
+        val showUserAlreadyExistError: Boolean = false,
+        val appUser: AppUser? = null
     )
 
 

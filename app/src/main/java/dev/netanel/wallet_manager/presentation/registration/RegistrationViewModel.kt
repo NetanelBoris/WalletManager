@@ -1,5 +1,6 @@
 package dev.netanel.wallet_manager.presentation.registration
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,9 @@ class RegistrationViewModel @Inject constructor(
         when (intent) {
 
             is RegistrationContract.RegistrationIntent.SetMail -> {
-                _state.value = _state.value.copy(mail = intent.mail)
+                val isMailValid = Validator.validateMail(intent.mail)
+                _state.value =
+                    _state.value.copy(mail = intent.mail, showMailFormatError = !isMailValid)
             }
 
             is RegistrationContract.RegistrationIntent.SetAddress -> {
@@ -31,11 +34,19 @@ class RegistrationViewModel @Inject constructor(
             }
 
             is RegistrationContract.RegistrationIntent.SetPassword -> {
-                _state.value = _state.value.copy(password = intent.password)
+                val isPasswordValid = Validator.validatePassword(intent.password)
+                _state.value = _state.value.copy(
+                    password = intent.password,
+                    showPasswordFormatError = !isPasswordValid
+                )
             }
 
             is RegistrationContract.RegistrationIntent.SetRePassword -> {
-                _state.value = _state.value.copy(rePassword = intent.rePassword)
+                val isPasswordsMatch = _state.value.password == intent.rePassword
+                _state.value = _state.value.copy(
+                    rePassword = intent.rePassword,
+                    showPasswordEqualityError = !isPasswordsMatch
+                )
             }
 
             is RegistrationContract.RegistrationIntent.SetLastName -> {
@@ -49,20 +60,7 @@ class RegistrationViewModel @Inject constructor(
             is RegistrationContract.RegistrationIntent.RegisterUser -> {
                 registerUser()
             }
-            is RegistrationContract.RegistrationIntent.ValidateEmailFormat -> {
-                val isValid = Validator.validateMail(_state.value.mail)
-                _state.value = _state.value.copy(showMailFormatError = !isValid)
-            }
 
-            is RegistrationContract.RegistrationIntent.ValidatePasswordFormat -> {
-                val isValid = Validator.validatePassword(_state.value.password)
-                _state.value = _state.value.copy(showPasswordFormatError = !isValid)
-            }
-
-            is RegistrationContract.RegistrationIntent.ValidatePasswordEquality -> {
-                val match = _state.value.password == _state.value.rePassword
-                _state.value = _state.value.copy(showPasswordEqualityError = !match)
-            }
 
         }
 
@@ -76,28 +74,23 @@ class RegistrationViewModel @Inject constructor(
             state.lastName,
             state.mail,
             state.password,
-            state.address
+            state.address,
+            state.rePassword
         ).all { it.isNotBlank() }
 
         val emailValid = Validator.validateMail(state.mail)
         val passwordsMatch = state.password == state.rePassword
-
-
         val passwordValid = Validator.validatePassword(state.password)
         if (!allFieldsFilled || !emailValid || !passwordValid || !passwordsMatch) {
-            _state.value = state.copy(
-                showEmptyFieldsError = !allFieldsFilled,
-                showMailFormatError = !emailValid,
-                showPasswordFormatError = !passwordValid,
-                showPasswordEqualityError = !passwordsMatch
-
-            )
+            if (!allFieldsFilled)
+                _state.value = state.copy(
+                    showEmptyFieldsError = true
+                )
             return
         }
 
         viewModelScope.launch {
-            _state.value = state.copy(isRegistering = true)
-
+            _state.value = state.copy(isRegistering = true, showEmptyFieldsError = false)
             val appUser = AppUser(
                 mail = state.mail,
                 hashedPassword = state.password,
@@ -105,13 +98,18 @@ class RegistrationViewModel @Inject constructor(
                 lastName = state.lastName,
                 address = state.address
             )
+            val isUserExist: Boolean = appUserUseCases.userExistsUseCase(appUser.mail)
+            if (isUserExist)
+                _state.value = _state.value.copy(showUserAlreadyExistError = true,isRegistering = false)
+            else {
+                appUserUseCases.insertAppUserUseCase(appUser)
 
-            appUserUseCases.insertAppUserUseCase(appUser)
-
-            _state.value = _state.value.copy(
-                isRegistered = true,
-                isRegistering = false
-            )
+                _state.value = _state.value.copy(
+                    isRegistered = true,
+                    isRegistering = false,
+                    appUser = appUser
+                )
+            }
         }
     }
 }

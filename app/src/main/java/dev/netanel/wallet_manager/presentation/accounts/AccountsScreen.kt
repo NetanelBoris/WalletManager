@@ -33,7 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.netanel.wallet_manager.domain.models.Account
+import dev.netanel.wallet_manager.domain.models.AppUser
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 import dev.netanel.wallet_manager.presentation.navigation.accountDetailsRoute
 
@@ -44,6 +46,8 @@ fun AccountsScreen(
     viewModel: AccountsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val appUser = AppUserSession.appUser
+
 
     LaunchedEffect(Unit) {
         viewModel.onIntent(AccountsContract.AccountsIntent.LoadAccounts)
@@ -69,23 +73,34 @@ fun AccountsScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .padding(padding)
                     .padding(16.dp)
+                    .fillMaxSize()
             ) {
-                items(state.accounts) { account ->
-                    AccountCard(
-                        account = account,
-                        onClick = {
-                            navController.navigate(accountDetailsRoute(account.id))
-                        },
-                        onDelete = {
-                            viewModel.onIntent(AccountsContract.AccountsIntent.DeleteAccount(it.id))
-                        }
-                    )
+                // AppUser Details
+                Text(text = "Welcome, ${appUser?.firstName} ${appUser?.lastName}", style = MaterialTheme.typography.titleMedium)
+                Text(text = "Email: ${appUser?.mail}")
+                Text(text = "Address: ${appUser?.address}")
+                Text(text = "-----------------------------", modifier = Modifier.padding(vertical = 8.dp))
+
+                // Accounts List
+                LazyColumn {
+                    items(state.accounts) { account ->
+                        AccountCard(
+                            account = account,
+                            onClick = {
+                                navController.navigate(accountDetailsRoute(account.id))
+                            },
+                            onDelete = {
+                                viewModel.onIntent(AccountsContract.AccountsIntent.DeleteAccount(it.id))
+                            }
+                        )
+                    }
                 }
             }
+
 
         }
     }

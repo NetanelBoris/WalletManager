@@ -9,11 +9,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.google.gson.Gson
+import dev.netanel.wallet_manager.domain.models.AppUser
 import dev.netanel.wallet_manager.presentation.accounts.AccountsScreen
 import dev.netanel.wallet_manager.presentation.add_account.AddAccountScreen
 import dev.netanel.wallet_manager.presentation.account_details.AccountDetailsScreen
 import dev.netanel.wallet_manager.presentation.add_transaction.AddTransactionScreen
-import dev.netanel.wallet_manager.presentation.navigation.Routes.ACCOUNTS
+import dev.netanel.wallet_manager.presentation.login.LoginScreen
 import dev.netanel.wallet_manager.presentation.navigation.Routes.TRANSACTIONS
 import dev.netanel.wallet_manager.presentation.registration.RegistrationScreen
 import dev.netanel.wallet_manager.presentation.transactions.TransactionsScreen
@@ -24,7 +26,9 @@ object Routes {
     const val ACCOUNT_DETAILS = "account_details/{accountId}"
     const val ADD_TRANSACTION = "add_transaction/{accountId}"
     const val TRANSACTIONS = "transactions";
-    const val REGISTRATION ="registration"
+    const val REGISTRATION = "registration"
+
+    const val LOGIN = "login"
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -35,11 +39,14 @@ fun WalletNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.REGISTRATION,
+        startDestination = Routes.LOGIN,
         modifier = modifier
     ) {
         composable(Routes.REGISTRATION) {
             RegistrationScreen(navController = navController)
+        }
+        composable(Routes.LOGIN) {
+            LoginScreen(navController = navController)
         }
         composable(Routes.ACCOUNTS) {
             AccountsScreen(navController = navController)
@@ -63,9 +70,7 @@ fun WalletNavGraph(
             val accountId = backStackEntry.arguments?.getString("accountId") ?: return@composable
             AddTransactionScreen(accountId = accountId, navController = navController)
         }
-        composable(ACCOUNTS) {
-            AccountsScreen(navController = navController)
-        }
+
         composable(TRANSACTIONS) {
             TransactionsScreen()
         }
@@ -74,6 +79,6 @@ fun WalletNavGraph(
     }
 }
 
-// Helper functions for generating full routes with params
 fun accountDetailsRoute(accountId: String) = "account_details/$accountId"
 fun addTransactionRoute(accountId: String) = "add_transaction/$accountId"
+

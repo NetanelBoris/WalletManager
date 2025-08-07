@@ -20,11 +20,12 @@ fun BottomNavigationBar(navController: NavHostController) {
 
     NavigationBar {
         NavigationBarItem(
-            selected = currentRoute?.startsWith(Routes.ACCOUNTS) == true,
+            selected = currentRoute?.startsWith("accounts") == true,
             onClick = {
-                if (currentRoute != Routes.ACCOUNTS) {
+                if (!currentRoute.orEmpty().startsWith("accounts")) {
                     navController.navigate(Routes.ACCOUNTS) {
-                        popUpTo(0) // avoids backstack buildup
+                        popUpTo(Routes.TRANSACTIONS) { inclusive = false }
+                        launchSingleTop = true
                     }
                 }
             },
@@ -33,11 +34,12 @@ fun BottomNavigationBar(navController: NavHostController) {
         )
 
         NavigationBarItem(
-            selected = currentRoute?.startsWith("transactions") == true,
+            selected = currentRoute == "transactions",
             onClick = {
                 if (currentRoute != "transactions") {
                     navController.navigate("transactions") {
-                        popUpTo(0)
+                        popUpTo(Routes.ACCOUNTS) { inclusive = false }
+                        launchSingleTop = true
                     }
                 }
             },

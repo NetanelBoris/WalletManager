@@ -11,15 +11,16 @@ import dev.netanel.wallet_manager.domain.repositories.AppUserRepository
 import dev.netanel.wallet_manager.domain.repositories.TransactionRepository
 import javax.inject.Inject
 
-class AppUserRepositoryImpl @Inject constructor(private val dao: AppUserDao): AppUserRepository{
-    override suspend fun getAppUserByMail(mail: String): AppUser {
-        val appUser : AppUserEntity =dao.getAppUserByMail(mail);
-        return appUser.toDomain();
+class AppUserRepositoryImpl @Inject constructor(private val dao: AppUserDao) : AppUserRepository {
+    override suspend fun getAppUserByMailAndPassword(mail: String, password: String): AppUser? {
+        val appUser: AppUserEntity? = dao.getAppUserByMail(mail, password);
+        return appUser?.toDomain();
     }
+
 
     override suspend fun insertAppUser(appUser: AppUser) {
         dao.insertAppUser(appUser.toEntity())
-        Log.d("nati1","inserteddddd")
+        Log.d("nati1", "inserteddddd")
     }
 
     override suspend fun userExists(mail: String): Boolean {

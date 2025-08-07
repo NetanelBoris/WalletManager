@@ -32,7 +32,11 @@ class MainActivity : ComponentActivity() {
             WalletManagerTheme {
                 val navController = rememberNavController()
                 val currentDestination by navController.currentBackStackEntryAsState()
-                val showBottomBar = currentDestination?.destination?.route in listOf("accounts", "transactions")
+                val showBottomBar = when {
+                    currentDestination?.destination?.route?.startsWith("accounts") == true -> true
+                    currentDestination?.destination?.route == "transactions" -> true
+                    else -> false
+                }
 
                 Scaffold(
                     bottomBar = {

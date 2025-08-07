@@ -7,23 +7,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 
 
@@ -33,18 +34,19 @@ fun RegistrationScreen(
     navController: NavController,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val mailUIFocus = remember { mutableStateOf(false) }
-    val passwordUIFocus = remember { mutableStateOf(false) }
-    val rePasswordUIFocus = remember { mutableStateOf(false) }
 
     val state by viewModel.state.collectAsState()
     LaunchedEffect(state.isRegistered) {
         if (state.isRegistered) {
+            AppUserSession.setUser(state.appUser)
             navController.navigate(Routes.ACCOUNTS) {
-                popUpTo(Routes.ACCOUNTS) { inclusive = true }
+                popUpTo(Routes.REGISTRATION) { inclusive = true }
             }
         }
     }
+
+
+
 
 
     Scaffold(
@@ -107,12 +109,6 @@ fun RegistrationScreen(
                 label = { Text("Mail") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onFocusChanged {
-                        if (mailUIFocus.value && !it.isFocused) {
-                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidateEmailFormat)
-                        }
-                        mailUIFocus.value = it.isFocused
-                    }
             )
             if (state.showMailFormatError) {
                 Text("Invalid email format", color = Color.Red)
@@ -128,12 +124,7 @@ fun RegistrationScreen(
                 label = { Text("Password") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onFocusChanged {
-                        if (passwordUIFocus.value && !it.isFocused) {
-                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidatePasswordFormat)
-                        }
-                        passwordUIFocus.value = it.isFocused
-                    }
+
             )
             if (state.showPasswordFormatError) {
                 Text(
@@ -153,12 +144,7 @@ fun RegistrationScreen(
                 label = { Text("Re-Enter Password") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .onFocusChanged {
-                        if (rePasswordUIFocus.value && !it.isFocused) {
-                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidatePasswordEquality)
-                        }
-                        rePasswordUIFocus.value = it.isFocused
-                    }
+
             )
             if (state.showPasswordEqualityError) {
                 Text("Passwords do not match", color = Color.Red)
@@ -169,18 +155,38 @@ fun RegistrationScreen(
             if (state.showEmptyFieldsError) {
                 Text("Please fill in all fields", color = Color.Red)
             }
+            if (state.showUserAlreadyExistError) {
+                Text("User with this mail already exists", color = Color.Red)
+            }
 
             Button(
                 onClick = {
                     viewModel.onIntent(
                         RegistrationContract.RegistrationIntent.RegisterUser
                     )
-
-
                 },
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
                 Text("SIGN UP")
+            }
+            TextButton(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    // Navigate to your registration screen
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.REGISTRATION) {
+                            inclusive = true
+                        }
+                    }
+                },
+            ) {
+                Text(
+                    text = "Already have an account? Sign in",
+                    color = Color.Blue,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
             }
         }
 

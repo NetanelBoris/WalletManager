@@ -72,9 +72,8 @@ fun AddAccountScreen(
                         viewModel.onIntent(
                             AddAccountContract.AddAccountIntent.AddAccount
                         )
-                        navController.navigate(Routes.ACCOUNTS) {
-                            popUpTo(Routes.ACCOUNTS) { inclusive = true }
-                        }
+                        navController.popBackStack()
+
                     } else {
                        viewModel.onIntent(AddAccountContract.AddAccountIntent.ShowError(true))
                     }

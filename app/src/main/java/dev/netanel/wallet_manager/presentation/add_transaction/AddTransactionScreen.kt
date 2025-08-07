@@ -24,9 +24,7 @@ fun AddTransactionScreen(
 ) {
     val state by viewModel.state.collectAsState()
     if (state.isSaved) {
-//        LaunchedEffect(Unit) {
             navController.popBackStack()
-//        }
     }
     Scaffold(
         topBar = {

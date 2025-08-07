@@ -21,7 +21,7 @@ import dev.netanel.wallet_manager.domain.usecases.account.GetAccountsUseCase
 import dev.netanel.wallet_manager.domain.usecases.account.GetTotalBalanceUseCase
 import dev.netanel.wallet_manager.domain.usecases.account.InsertAccountUseCase
 import dev.netanel.wallet_manager.domain.usecases.appUser.AppUserUseCases
-import dev.netanel.wallet_manager.domain.usecases.appUser.GetAppUserByMailUseCase
+import dev.netanel.wallet_manager.domain.usecases.appUser.GetAppUserByMailAndPasswordUseCase
 import dev.netanel.wallet_manager.domain.usecases.appUser.InsertAppUserUseCase
 import dev.netanel.wallet_manager.domain.usecases.appUser.UserExistsUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.DeleteTransactionUseCase
@@ -69,7 +69,7 @@ object AppModule {
     @Singleton
     fun provideAppUserUseCases(repository: AppUserRepository): AppUserUseCases {
         return AppUserUseCases(
-            getAppUserByMailUseCase = GetAppUserByMailUseCase(repository),
+            getAppUserByMailAndPasswordUseCase = GetAppUserByMailAndPasswordUseCase(repository),
             insertAppUserUseCase = InsertAppUserUseCase(repository),
             userExistsUseCase = UserExistsUseCase(repository)
         )
