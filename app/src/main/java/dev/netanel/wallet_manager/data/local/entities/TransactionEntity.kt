@@ -10,5 +10,7 @@ data class TransactionEntity(
     val amount: Double,
     val description: String,
     val category: String,
-    val date: String
+    val date: String,
+    val sourceMail: String,
+    val destinationMail: String? = null,
 )

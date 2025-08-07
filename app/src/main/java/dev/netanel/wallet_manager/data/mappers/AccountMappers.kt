@@ -10,7 +10,8 @@ fun AccountEntity.toAccount(): Account {
         id = id,
         name = name,
         balance = balance,
-        type = AccountType.valueOf(type)
+        type = AccountType.valueOf(type),
+        managerMail = managerMail
     )
 }
 
@@ -19,6 +20,8 @@ fun Account.toAccountEntity(): AccountEntity {
         id = id,
         name = name,
         balance = balance,
-        type = type.name
+        type = type.name,
+        managerMail = managerMail
+
     )
 }

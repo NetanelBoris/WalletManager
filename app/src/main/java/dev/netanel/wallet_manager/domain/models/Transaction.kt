@@ -9,5 +9,7 @@ data class Transaction(
     val amount: Double,
     val description: String,
     val category: TransactionCategory,
-    val date: LocalDateTime
+    val date: LocalDateTime,
+    val sourceMail: String,
+    val destinationMail: String? = null,
 )

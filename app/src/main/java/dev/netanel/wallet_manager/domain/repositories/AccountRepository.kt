@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface AccountRepository {
-    fun getAccounts(): Flow<List<Account>>
+    fun getAccounts(managerMail:String): Flow<List<Account>>
     fun getTotalBalance(): Flow<Double>
     suspend fun insertAccount(account: Account)
     suspend fun deleteAccount(account: Account)

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
 import dev.netanel.wallet_manager.domain.usecases.account.*
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,7 +18,7 @@ import javax.inject.Inject
 class AccountsViewModel @Inject constructor(
     private val accountUseCases: AccountUseCases,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
     private val _state = MutableStateFlow(AccountsContract.AccountsState())
     val state: StateFlow<AccountsContract.AccountsState> = _state
@@ -33,7 +34,10 @@ class AccountsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             launch {
-                accountUseCases.getAccounts().collectLatest { accounts ->
+                accountUseCases.getAccounts(
+                    AppUserSession.appUser?.mail
+                        ?: ""
+                ).collectLatest { accounts ->
                     _state.value = _state.value.copy(accounts = accounts, isLoading = false)
                 }
             }

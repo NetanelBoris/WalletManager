@@ -15,8 +15,8 @@ class AccountRepositoryImpl @Inject constructor(
     private val dao: AccountDao
 ) : AccountRepository {
 
-    override fun getAccounts(): Flow<List<Account>> {
-        return dao.getAllAccounts().map { list ->
+    override fun getAccounts(managerMail:String): Flow<List<Account>> {
+        return dao.getAllAccounts(managerMail).map { list ->
             list.map { it.toDomain() }
         }
     }
@@ -47,7 +47,8 @@ private fun AccountEntity.toDomain(): Account {
         id = id,
         name = name,
         balance = balance,
-        type = AccountType.valueOf(type)
+        type = AccountType.valueOf(type),
+        managerMail=managerMail
     )
 }
 
@@ -56,7 +57,9 @@ private fun Account.toEntity(): AccountEntity {
         id = id,
         name = name,
         balance = balance,
-        type = type.name
+        type = type.name,
+        managerMail=managerMail
+
     )
 }
 

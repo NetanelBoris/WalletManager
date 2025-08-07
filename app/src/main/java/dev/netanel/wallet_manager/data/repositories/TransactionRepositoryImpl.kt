@@ -18,8 +18,8 @@ class TransactionRepositoryImpl @Inject constructor(
     private val dao: TransactionDao
 ) : TransactionRepository {
 
-    override fun getAllTransactions(): Flow<List<Transaction>> {
-        return dao.getAllTransactions().map { list ->
+    override fun getAllTransactions(mail:String): Flow<List<Transaction>> {
+        return dao.getAllTransactions(mail).map { list ->
             list.map { it.toDomain() }
         }
     }
@@ -38,6 +38,7 @@ class TransactionRepositoryImpl @Inject constructor(
         dao.deleteTransaction(transaction.toEntity())
     }
 }
+
 @RequiresApi(Build.VERSION_CODES.O)
 private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
@@ -49,7 +50,9 @@ private fun TransactionEntity.toDomain(): Transaction {
         amount = amount,
         description = description,
         category = TransactionCategory.valueOf(category),
-        date = LocalDateTime.parse(date, formatter)
+        date = LocalDateTime.parse(date, formatter),
+        sourceMail = sourceMail,
+        destinationMail = destinationMail,
     )
 }
 
@@ -61,6 +64,8 @@ private fun Transaction.toEntity(): TransactionEntity {
         amount = amount,
         description = description,
         category = category.name,
-        date = date.format(formatter)
+        date = date.format(formatter),
+        sourceMail = sourceMail,
+        destinationMail = destinationMail
     )
 }

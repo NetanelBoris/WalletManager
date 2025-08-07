@@ -11,8 +11,8 @@ import androidx.room.OnConflictStrategy
 @Dao
 interface TransactionDao {
 
-    @Query("SELECT * FROM transactions ORDER BY date DESC")
-    fun getAllTransactions(): Flow<List<TransactionEntity>>
+    @Query("SELECT * FROM transactions WHERE sourceMail= :mail OR destinationMail= :mail ORDER BY date DESC")
+    fun getAllTransactions(mail:String): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions WHERE accountId = :accountId ORDER BY date DESC")
     fun getTransactionsForAccount(accountId: String): Flow<List<TransactionEntity>>

@@ -11,7 +11,7 @@ object TransactionsContract {
         object LoadTransactions : TransactionsIntent()
         data class FilterByAccount(val accountId: String?) : TransactionsIntent()
         data class FilterByCategory(val category: TransactionCategory?) : TransactionsIntent()
-        data class LoadAll(val accounts: List<Account>) : TransactionsIntent()
+//        data class LoadAll(val accounts: List<Account>) : TransactionsIntent()
         data class SelectAccount(val accountId: String?) : TransactionsIntent()
     }
 

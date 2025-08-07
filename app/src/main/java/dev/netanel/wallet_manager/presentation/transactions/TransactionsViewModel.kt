@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases
 import dev.netanel.wallet_manager.domain.usecases.transaction.TransactionUseCases
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -22,16 +23,18 @@ class TransactionsViewModel @Inject constructor(
 
     fun onIntent(intent: TransactionsContract.TransactionsIntent) {
         when (intent) {
-            is TransactionsContract.TransactionsIntent.LoadAll -> {
-                viewModelScope.launch {
-                    val allTransactions = transactionUseCases.getAllTransactions().first()
-                    _state.value = _state.value.copy(
-                        accounts = intent.accounts,
-                        allTransactions = allTransactions,
-                        filteredTransactions = allTransactions
-                    )
-                }
-            }
+//            is TransactionsContract.TransactionsIntent.LoadAll -> {
+//                viewModelScope.launch {
+//                    val allTransactions =
+//                        transactionUseCases.getAllTransactions(AppUserSession.appUser?.mail ?: "")
+//                            .first()
+//                    _state.value = _state.value.copy(
+//                        accounts = intent.accounts,
+//                        allTransactions = allTransactions,
+//                        filteredTransactions = allTransactions
+//                    )
+//                }
+//            }
 
             is TransactionsContract.TransactionsIntent.SelectAccount -> {
                 _state.value = _state.value.copy(selectedAccountId = intent.accountId)
@@ -59,8 +62,9 @@ class TransactionsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             try {
-                val accounts = accountUseCases.getAccounts().first()
-                val transactions = transactionUseCases.getAllTransactions().first()
+                val accounts = accountUseCases.getAccounts(AppUserSession.appUser?.mail ?: "").first()
+                val transactions = transactionUseCases.getAllTransactions(AppUserSession.appUser?.mail
+                    ?: "").first()
 
                 _state.value = _state.value.copy(
                     accounts = accounts,

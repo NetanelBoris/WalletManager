@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AccountDao {
-    @Query("SELECT * FROM accounts")
-    fun getAllAccounts(): Flow<List<AccountEntity>>
+    @Query("SELECT * FROM accounts WHERE managerMail = :managerMail")
+    fun getAllAccounts(managerMail:String): Flow<List<AccountEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: AccountEntity)

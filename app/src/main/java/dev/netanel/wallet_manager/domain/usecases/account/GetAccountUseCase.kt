@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetAccountsUseCase @Inject constructor(
     private val repository: AccountRepository
 ) {
-    operator fun invoke(): Flow<List<Account>> {
-        return repository.getAccounts()
+    operator fun invoke(managerMail: String): Flow<List<Account>> {
+        return repository.getAccounts(managerMail)
     }
 }

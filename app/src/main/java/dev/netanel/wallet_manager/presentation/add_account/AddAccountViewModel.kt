@@ -7,6 +7,7 @@ import dev.netanel.wallet_manager.domain.models.Account
 import dev.netanel.wallet_manager.domain.models.enums.AccountType
 import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases
 import dev.netanel.wallet_manager.domain.usecases.account.InsertAccountUseCase
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -48,7 +49,8 @@ class AddAccountViewModel @Inject constructor(
                  id = UUID.randomUUID().toString(),
                  name = _state.value.name,
                  type = AccountType.valueOf(_state.value.type.toString()),
-                 balance = _state.value.balance.toDouble()
+                 balance = _state.value.balance.toDouble(),
+                 managerMail = AppUserSession.appUser?.mail ?: ""
              )
              insertAccountUseCase.invoke(account)
          }

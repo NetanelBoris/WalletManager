@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.netanel.wallet_manager.domain.models.Transaction
 import dev.netanel.wallet_manager.domain.usecases.transaction.InsertTransactionUseCase
+import dev.netanel.wallet_manager.presentation.managers.AppUserSession
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -63,11 +64,12 @@ class AddTransactionViewModel @Inject constructor(
                 amount = amount,
                 description = currentState.description,
                 category = currentState.category,
-                date = LocalDateTime.now()
+                date = LocalDateTime.now(),
+                sourceMail = AppUserSession.appUser?.mail ?: "",
+                destinationMail = null
+
             )
-
             insertTransactionUseCase(transaction)
-
             _state.value = currentState.copy(isSaved = true)
         }
     }
