@@ -22,6 +22,9 @@ object RegistrationContract {
 
 
         object RegisterUser : RegistrationIntent()
+        object ValidateEmailFormat : RegistrationIntent()
+        object ValidatePasswordFormat : RegistrationIntent()
+        object ValidatePasswordEquality : RegistrationIntent()
 
 
     }

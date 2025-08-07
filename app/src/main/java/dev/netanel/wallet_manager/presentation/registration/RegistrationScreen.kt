@@ -15,13 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import dev.netanel.wallet_manager.presentation.add_account.AddAccountContract
 import dev.netanel.wallet_manager.presentation.navigation.Routes
 
 
@@ -31,10 +33,11 @@ fun RegistrationScreen(
     navController: NavController,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
-    val isFormValid =
-        !state.showEmptyFieldsError && !state.showPasswordEqualityError && !state.showPasswordFormatError && !state.showMailFormatError
+    val mailUIFocus = remember { mutableStateOf(false) }
+    val passwordUIFocus = remember { mutableStateOf(false) }
+    val rePasswordUIFocus = remember { mutableStateOf(false) }
 
+    val state by viewModel.state.collectAsState()
     LaunchedEffect(state.isRegistered) {
         if (state.isRegistered) {
             navController.navigate(Routes.ACCOUNTS) {
@@ -99,12 +102,17 @@ fun RegistrationScreen(
             OutlinedTextField(
                 value = state.mail,
                 onValueChange = {
-                    viewModel.onIntent(
-                        RegistrationContract.RegistrationIntent.SetMail(it)
-                    )
+                    viewModel.onIntent(RegistrationContract.RegistrationIntent.SetMail(it))
                 },
                 label = { Text("Mail") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (mailUIFocus.value && !it.isFocused) {
+                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidateEmailFormat)
+                        }
+                        mailUIFocus.value = it.isFocused
+                    }
             )
             if (state.showMailFormatError) {
                 Text("Invalid email format", color = Color.Red)
@@ -115,12 +123,17 @@ fun RegistrationScreen(
             OutlinedTextField(
                 value = state.password,
                 onValueChange = {
-                    viewModel.onIntent(
-                        RegistrationContract.RegistrationIntent.SetPassword(it)
-                    )
+                    viewModel.onIntent(RegistrationContract.RegistrationIntent.SetPassword(it))
                 },
                 label = { Text("Password") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (passwordUIFocus.value && !it.isFocused) {
+                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidatePasswordFormat)
+                        }
+                        passwordUIFocus.value = it.isFocused
+                    }
             )
             if (state.showPasswordFormatError) {
                 Text(
@@ -129,17 +142,23 @@ fun RegistrationScreen(
                 )
             }
 
+
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedTextField(
                 value = state.rePassword,
                 onValueChange = {
-                    viewModel.onIntent(
-                        RegistrationContract.RegistrationIntent.SetRePassword(it)
-                    )
+                    viewModel.onIntent(RegistrationContract.RegistrationIntent.SetRePassword(it))
                 },
                 label = { Text("Re-Enter Password") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged {
+                        if (rePasswordUIFocus.value && !it.isFocused) {
+                            viewModel.onIntent(RegistrationContract.RegistrationIntent.ValidatePasswordEquality)
+                        }
+                        rePasswordUIFocus.value = it.isFocused
+                    }
             )
             if (state.showPasswordEqualityError) {
                 Text("Passwords do not match", color = Color.Red)
@@ -148,9 +167,8 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             if (state.showEmptyFieldsError) {
-                Text("Please fill in all required fields", color = Color.Red)
+                Text("Please fill in all fields", color = Color.Red)
             }
-
 
             Button(
                 onClick = {

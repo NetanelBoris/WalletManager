@@ -49,6 +49,20 @@ class RegistrationViewModel @Inject constructor(
             is RegistrationContract.RegistrationIntent.RegisterUser -> {
                 registerUser()
             }
+            is RegistrationContract.RegistrationIntent.ValidateEmailFormat -> {
+                val isValid = Validator.validateMail(_state.value.mail)
+                _state.value = _state.value.copy(showMailFormatError = !isValid)
+            }
+
+            is RegistrationContract.RegistrationIntent.ValidatePasswordFormat -> {
+                val isValid = Validator.validatePassword(_state.value.password)
+                _state.value = _state.value.copy(showPasswordFormatError = !isValid)
+            }
+
+            is RegistrationContract.RegistrationIntent.ValidatePasswordEquality -> {
+                val match = _state.value.password == _state.value.rePassword
+                _state.value = _state.value.copy(showPasswordEqualityError = !match)
+            }
 
         }
 
