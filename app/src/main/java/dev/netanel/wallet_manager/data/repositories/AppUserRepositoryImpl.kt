@@ -18,7 +18,6 @@ class AppUserRepositoryImpl @Inject constructor(private val dao: AppUserDao) : A
 
     override suspend fun insertAppUser(appUser: AppUser) {
         dao.insertAppUser(appUser.toEntity())
-        Log.d("nati1", "inserteddddd")
     }
 
     override suspend fun userExists(mail: String?): Boolean {

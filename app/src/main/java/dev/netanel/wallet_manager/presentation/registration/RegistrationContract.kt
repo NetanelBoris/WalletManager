@@ -16,6 +16,7 @@ object RegistrationContract {
 
 
         data class SetPassword(val password: String) : RegistrationIntent()
+        data class SetPhoneNumber(val phoneNumber: String) : RegistrationIntent()
 
         data class SetRePassword(val rePassword: String) : RegistrationIntent()
 
@@ -34,6 +35,7 @@ object RegistrationContract {
         val lastName: String = "",
         val mail: String = "",
         val password: String = "",
+        val phoneNumber: String = "",
         val rePassword: String = "",
         val address: String = "",
         val isRegistering: Boolean = false,
@@ -43,6 +45,7 @@ object RegistrationContract {
         val showPasswordEqualityError: Boolean = false,
         val showEmptyFieldsError: Boolean = false,
         val showUserAlreadyExistError: Boolean = false,
+        val showPhoneNumberFormatError: Boolean = false,
         val appUser: AppUser? = null
     )
 

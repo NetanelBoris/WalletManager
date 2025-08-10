@@ -36,6 +36,14 @@ class RegistrationViewModel @Inject constructor(
                 _state.value = _state.value.copy(address = intent.address)
             }
 
+            is RegistrationContract.RegistrationIntent.SetPhoneNumber -> {
+                val isPhoneNumberValid = Validator.isValidPhoneNumber(intent.phoneNumber)
+                _state.value = _state.value.copy(
+                    phoneNumber = intent.phoneNumber,
+                    showPhoneNumberFormatError = !isPhoneNumberValid
+                )
+            }
+
             is RegistrationContract.RegistrationIntent.SetPassword -> {
                 val isPasswordValid = Validator.validatePassword(intent.password)
                 _state.value = _state.value.copy(
@@ -59,6 +67,7 @@ class RegistrationViewModel @Inject constructor(
             is RegistrationContract.RegistrationIntent.SetFirstName -> {
                 _state.value = _state.value.copy(firstName = intent.firstName)
             }
+
 
             is RegistrationContract.RegistrationIntent.RegisterUser -> {
                 registerUser()
@@ -99,7 +108,8 @@ class RegistrationViewModel @Inject constructor(
                 hashedPassword = state.password,
                 firstName = state.firstName,
                 lastName = state.lastName,
-                address = state.address
+                address = state.address,
+                phoneNumber = state.phoneNumber
             )
             val isUserExist: Boolean = appUserUseCases.userExistsUseCase(appUser.mail)
             if (isUserExist)

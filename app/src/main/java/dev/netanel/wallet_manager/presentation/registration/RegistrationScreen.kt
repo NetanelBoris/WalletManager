@@ -99,7 +99,24 @@ fun RegistrationScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
-            // ... inside Column before the Button:
+            OutlinedTextField(
+                value = state.phoneNumber,
+                onValueChange = {
+                    viewModel.onIntent(
+                        RegistrationContract.RegistrationIntent.SetPhoneNumber(
+                            it
+                        )
+                    )
+                },
+                label = { Text("Phone Number") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            if (state.showPhoneNumberFormatError) {
+                Text("Invalid phone number format", color = Color.Red)
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
 
             OutlinedTextField(
                 value = state.mail,

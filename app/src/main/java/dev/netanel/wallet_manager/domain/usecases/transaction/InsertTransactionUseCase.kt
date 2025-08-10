@@ -15,7 +15,6 @@ class InsertTransactionUseCase @Inject constructor(
         var updatedTransaction = transaction
 
 
-
         if (transaction.destinationMail != null) {
             val destinationAccount =
                 accountRepository.getIncomesAccountByMail(transaction.destinationMail)

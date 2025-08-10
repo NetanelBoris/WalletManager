@@ -9,7 +9,8 @@ fun AppUserEntity.toDomain(): AppUser {
         hashedPassword = hashedPassword,
         firstName = firstName,
         lastName = lastName,
-        address = address
+        address = address,
+        phoneNumber = phoneNumber
     )
 }
 
@@ -19,6 +20,7 @@ fun AppUser.toEntity(): AppUserEntity {
         hashedPassword = hashedPassword,
         firstName = firstName,
         lastName = lastName,
-        address = address
+        address = address,
+        phoneNumber = phoneNumber
     )
 }

@@ -11,8 +11,15 @@ class Validator {
             return lengthOk && upperCase && lowerCase && specialChar
         }
 
-        fun validateMail(mail: String?): Boolean{
+        fun validateMail(mail: String?): Boolean {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()
         }
+
+        fun isValidPhoneNumber(phoneNumber: String): Boolean {
+            val cleaned = phoneNumber.replace(" ", "").replace("-", "")
+            val regex = Regex("^\\+?[0-9]{7,15}$")
+            return regex.matches(cleaned)
+        }
+
     }
 }

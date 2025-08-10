@@ -7,10 +7,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "appUsers")
 data class AppUserEntity(
     @PrimaryKey val mail: String,
-    val hashedPassword: String ,
-    val firstName:String,
+    val hashedPassword: String,
+    val firstName: String,
     val lastName: String,
-    val address: String
+    val address: String,
+    val phoneNumber: String
 )
 
 

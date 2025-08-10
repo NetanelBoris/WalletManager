@@ -80,10 +80,17 @@ fun AccountsScreen(
                     .fillMaxSize()
             ) {
                 // AppUser Details
-                Text(text = "Welcome, ${appUser?.firstName} ${appUser?.lastName}", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = "Welcome, ${appUser?.lastName} ${appUser?.firstName}" + " 👋",
+                    style = MaterialTheme.typography.titleMedium
+                )
                 Text(text = "Email: ${appUser?.mail}")
                 Text(text = "Address: ${appUser?.address}")
-                Text(text = "-----------------------------", modifier = Modifier.padding(vertical = 8.dp))
+                Text(text = "Phone Number: ${appUser?.phoneNumber}")
+                Text(
+                    text = "-----------------------------",
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
 
                 // Accounts List
                 LazyColumn {

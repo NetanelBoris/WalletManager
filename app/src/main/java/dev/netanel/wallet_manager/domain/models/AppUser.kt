@@ -5,5 +5,6 @@ data class AppUser(
     val hashedPassword: String ,
     val firstName:String,
     val lastName: String,
-    val address: String
+    val address: String,
+    val phoneNumber: String
 )
