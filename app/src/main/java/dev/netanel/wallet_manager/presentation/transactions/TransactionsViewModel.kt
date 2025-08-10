@@ -62,9 +62,15 @@ class TransactionsViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             try {
-                val accounts = accountUseCases.getAccounts(AppUserSession.appUser?.mail ?: "").first()
-                val transactions = transactionUseCases.getAllTransactions(AppUserSession.appUser?.mail
-                    ?: "").first()
+                val accounts =
+                    accountUseCases.getAccounts(AppUserSession.appUser?.mail ?: "").first()
+                val transactions = transactionUseCases.getAllTransactions(
+                    AppUserSession.appUser?.mail
+                        ?: ""
+                ).first()
+//                val incomes = transactionUseCases.getAllUserIncomes(AppUserSession.appUser?.mail
+//                    ?: "").first()
+
 
                 _state.value = _state.value.copy(
                     accounts = accounts,
@@ -83,14 +89,22 @@ class TransactionsViewModel @Inject constructor(
 
     private fun applyFilters() {
         val transactions = _state.value.allTransactions
-        val accountId = _state.value.selectedAccountId
-        val category = _state.value.selectedCategory
+        val selectedAccountId = _state.value.selectedAccountId
+        val selectedCategory = _state.value.selectedCategory
+        val userMail = AppUserSession.appUser?.mail.orEmpty()
+        val incomesAccountId = "$userMail.incomes"
+        val filtered = transactions.filter { tx ->
+            val accountMatches = when {
+                selectedAccountId == null -> true
+                selectedAccountId == incomesAccountId ->
+                    (tx.accountId == incomesAccountId) || (tx.destinationMail == userMail)
 
-        val filtered = transactions.filter {
-            (accountId == null || it.accountId == accountId) &&
-                    (category == null || it.category.name == category.toString())
+                else -> tx.accountId == selectedAccountId
+            }
+            val categoryMatches = selectedCategory == null || tx.category == selectedCategory
+            accountMatches && categoryMatches
         }
-
         _state.value = _state.value.copy(filteredTransactions = filtered)
     }
+
 }

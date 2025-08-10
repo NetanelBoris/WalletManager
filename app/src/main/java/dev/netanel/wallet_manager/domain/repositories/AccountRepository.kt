@@ -15,6 +15,6 @@ interface AccountRepository {
 
     suspend fun getAccountTypeById(accountId:String): AccountType
     suspend fun getAccountManagerMailById(accountId:String): String
-    suspend fun getIncomesAccountByMail(accountMail:String): Account
+    suspend fun getIncomesAccountByMail(accountMail: String?): Account
 
 }

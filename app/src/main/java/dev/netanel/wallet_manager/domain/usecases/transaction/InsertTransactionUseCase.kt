@@ -15,7 +15,7 @@ class InsertTransactionUseCase @Inject constructor(
         var updatedTransaction = transaction
 
 
-        if (transaction.destinationMail != null) {
+        if (transaction.destinationMail != "") {
             val destinationAccount =
                 accountRepository.getIncomesAccountByMail(transaction.destinationMail)
             val updatedDestBalance = destinationAccount.balance + transaction.amount

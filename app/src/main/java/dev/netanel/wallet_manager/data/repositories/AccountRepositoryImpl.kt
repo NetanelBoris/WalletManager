@@ -49,7 +49,7 @@ class AccountRepositoryImpl @Inject constructor(
         return dao.getAccountManagerMailById(accountId)
     }
 
-    override suspend fun getIncomesAccountByMail(accountMail: String): Account {
+    override suspend fun getIncomesAccountByMail(accountMail: String?): Account {
         return dao.getIncomesAccountByMail(mail = accountMail).toAccount()
     }
 }

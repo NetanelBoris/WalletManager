@@ -51,7 +51,7 @@ class TransactionRepositoryImpl @Inject constructor(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun TransactionEntity.toDomain(): Transaction {

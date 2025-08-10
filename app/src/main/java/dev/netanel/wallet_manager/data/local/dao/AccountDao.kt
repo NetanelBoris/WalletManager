@@ -36,7 +36,7 @@ interface AccountDao {
 
     @Query("SELECT * FROM accounts WHERE managerMail = :mail AND type = :type LIMIT 1")
     suspend fun getIncomesAccountByMail(
-        mail: String,
+        mail: String?,
         type: String = AccountType.EXTERNAL_INCOMES.name
     ): AccountEntity
 
