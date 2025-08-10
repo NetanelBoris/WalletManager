@@ -10,19 +10,27 @@ class InsertTransactionUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
     suspend operator fun invoke(transaction: Transaction) {
-        // Insert the transaction
-        transactionRepository.insertTransaction(transaction)
+        val sourceAccount = accountRepository.getAccountById(transaction.accountId)
+        var updatedSrcBalance = sourceAccount.balance + transaction.amount
+        var updatedTransaction = transaction
 
-        // Get the account associated with this transaction
-        val account = accountRepository.getAccountById(transaction.accountId)
 
-        // Calculate new balance
-        val updatedBalance = account.balance + transaction.amount
 
-        // Create updated account
-        val updatedAccount = account.copy(balance = updatedBalance)
+        if (transaction.destinationMail != null) {
+            val destinationAccount =
+                accountRepository.getIncomesAccountByMail(transaction.destinationMail)
+            val updatedDestBalance = destinationAccount.balance + transaction.amount
+            val updatedDestAccount = destinationAccount.copy(balance = updatedDestBalance)
+            accountRepository.updateAccount(updatedDestAccount)
+            updatedTransaction = transaction.copy(amount = transaction.amount * -1)
+            updatedSrcBalance = sourceAccount.balance - transaction.amount
 
-        // Update account with new balance
-        accountRepository.updateAccount(updatedAccount)
+        }
+
+        transactionRepository.insertTransaction(updatedTransaction)
+        val updatedSrcAccount = sourceAccount.copy(balance = updatedSrcBalance)
+        accountRepository.updateAccount(updatedSrcAccount)
+
+
     }
 }

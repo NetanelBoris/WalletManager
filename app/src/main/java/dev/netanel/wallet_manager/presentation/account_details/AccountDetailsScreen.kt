@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import dev.netanel.wallet_manager.domain.models.enums.AccountType
 import dev.netanel.wallet_manager.presentation.navigation.addTransactionRoute
 import dev.netanel.wallet_manager.ui.special_widgets.TransactionItem
 

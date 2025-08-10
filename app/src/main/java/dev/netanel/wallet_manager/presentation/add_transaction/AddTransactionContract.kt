@@ -24,6 +24,7 @@ object AddTransactionContract {
         val showError: Boolean = false,
         val showUserNotExistError: Boolean = false,
         val showMailNotValidError: Boolean = false,
+        val showNegativeAmountError: Boolean = false,
         val destinationMail: String? = ""
     )
 

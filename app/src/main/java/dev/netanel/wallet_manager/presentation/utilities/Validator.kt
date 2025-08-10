@@ -11,7 +11,7 @@ class Validator {
             return lengthOk && upperCase && lowerCase && specialChar
         }
 
-        fun validateMail(mail:String): Boolean{
+        fun validateMail(mail: String?): Boolean{
             return android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches()
         }
     }

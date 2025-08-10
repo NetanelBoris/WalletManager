@@ -17,7 +17,10 @@ import dev.netanel.wallet_manager.domain.repositories.AppUserRepository
 import dev.netanel.wallet_manager.domain.repositories.TransactionRepository
 import dev.netanel.wallet_manager.domain.usecases.account.AccountUseCases
 import dev.netanel.wallet_manager.domain.usecases.account.DeleteAccountUseCase
+import dev.netanel.wallet_manager.domain.usecases.account.GetAccountManagerMailByIdUseCase
+import dev.netanel.wallet_manager.domain.usecases.account.GetAccountTypeByIdUseCase
 import dev.netanel.wallet_manager.domain.usecases.account.GetAccountsUseCase
+import dev.netanel.wallet_manager.domain.usecases.account.GetIncomesAccountByMailUseCase
 import dev.netanel.wallet_manager.domain.usecases.account.GetTotalBalanceUseCase
 import dev.netanel.wallet_manager.domain.usecases.account.InsertAccountUseCase
 import dev.netanel.wallet_manager.domain.usecases.appUser.AppUserUseCases
@@ -26,6 +29,7 @@ import dev.netanel.wallet_manager.domain.usecases.appUser.InsertAppUserUseCase
 import dev.netanel.wallet_manager.domain.usecases.appUser.UserExistsUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.DeleteTransactionUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.GetAllTransactionsUseCase
+import dev.netanel.wallet_manager.domain.usecases.transaction.GetAllUserIncomesUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.GetTransactionsForAccountUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.InsertTransactionUseCase
 import dev.netanel.wallet_manager.domain.usecases.transaction.TransactionUseCases
@@ -61,7 +65,11 @@ object AppModule {
             getAccounts = GetAccountsUseCase(repository),
             insertAccount = InsertAccountUseCase(repository),
             deleteAccount = DeleteAccountUseCase(repository),
-            getTotalBalance = GetTotalBalanceUseCase(repository)
+            getTotalBalance = GetTotalBalanceUseCase(repository),
+            getAccountTypeByIdUseCase = GetAccountTypeByIdUseCase(repository),
+            getAccountManagerMailByIdUseCase = GetAccountManagerMailByIdUseCase(repository),
+            getIncomesAccountByMailUseCase = GetIncomesAccountByMailUseCase(repository)
+
         )
     }
 
@@ -86,7 +94,9 @@ object AppModule {
             getAllTransactions = GetAllTransactionsUseCase(transactionRepository),
             getTransactionsForAccount = GetTransactionsForAccountUseCase(transactionRepository),
             insertTransaction = InsertTransactionUseCase(transactionRepository, accountRepository),
-            deleteTransaction = DeleteTransactionUseCase(transactionRepository)
+            deleteTransaction = DeleteTransactionUseCase(transactionRepository),
+            getAllUserIncomes = GetAllUserIncomesUseCase(transactionRepository)
+
         )
     }
 

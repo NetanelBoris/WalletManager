@@ -22,4 +22,10 @@ interface TransactionDao {
 
     @Delete
     suspend fun deleteTransaction(transaction: TransactionEntity)
+
+    @Query("SELECT * FROM transactions WHERE destinationMail = :mail ORDER BY date DESC")
+    fun getAllUserIncomes(mail: String): Flow<List<TransactionEntity>>
+
+
+
 }

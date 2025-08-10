@@ -31,15 +31,22 @@ class AddTransactionViewModel @Inject constructor(
     fun onIntent(intent: AddTransactionContract.AddTransactionIntent) {
         when (intent) {
             is AddTransactionContract.AddTransactionIntent.SetAmount -> {
-                _state.value = _state.value.copy(amount = intent.amount)
+                _state.value =
+                    _state.value.copy(
+                        amount = intent.amount,
+                        showNegativeAmountError = false,
+                        showError = false,
+                    )
             }
 
             is AddTransactionContract.AddTransactionIntent.SetDescription -> {
-                _state.value = _state.value.copy(description = intent.description)
+                _state.value =
+                    _state.value.copy(description = intent.description, showError = false)
             }
 
             is AddTransactionContract.AddTransactionIntent.SetCategory -> {
-                _state.value = _state.value.copy(category = intent.category)
+                _state.value =
+                    _state.value.copy(category = intent.category, showNegativeAmountError = false)
             }
 
             is AddTransactionContract.AddTransactionIntent.SubmitTransaction -> {
@@ -51,7 +58,8 @@ class AddTransactionViewModel @Inject constructor(
                 _state.value =
                     _state.value.copy(
                         destinationMail = intent.destinationMail,
-                        showMailNotValidError = !isMailValid
+                        showMailNotValidError = !isMailValid,
+                        showError = false
                     )
             }
         }
@@ -59,45 +67,57 @@ class AddTransactionViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun submitTransaction(accountId: String) {
-        val currentState = _state.value
-        val amount = currentState.amount.toDoubleOrNull()
+        val s = _state.value
+        val amount = s.amount.toDoubleOrNull()
         val isAmountInvalid = amount == null
-        val isDescriptionEmpty = currentState.description.isBlank()
-        val isSendByMail = currentState.category == TransactionCategory.SEND_MONEY_BY_MAIL
-        val isDestinationMailInvalid = currentState.destinationMail == null || currentState.showMailNotValidError
+        val isDescriptionEmpty = s.description.isBlank()
+        val isSendByMail = s.category == TransactionCategory.SEND_MONEY_BY_MAIL
+        val isDestinationMailInvalid = s.destinationMail.isNullOrBlank() || s.showMailNotValidError
 
         if (isAmountInvalid || isDescriptionEmpty || (isSendByMail && isDestinationMailInvalid)) {
-            _state.value = currentState.copy(showError = true)
+            _state.value = s.copy(showError = true)
             return
         }
-
+        if (isSendByMail) {
+            if (amount < 0.0) {
+                _state.value = s.copy(showNegativeAmountError = true, showError = true)
+                return
+            }
+            if (!Validator.validateMail(s.destinationMail.orEmpty())) {
+                _state.value = s.copy(showMailNotValidError = true, showError = true)
+                return
+            }
+        }
         viewModelScope.launch {
-            _state.value = currentState.copy(isSubmitting = true)
+            _state.value = s.copy(isSubmitting = true, showNegativeAmountError = false)
 
-            val transaction = Transaction(
+            val tx = Transaction(
                 id = UUID.randomUUID().toString(),
                 accountId = accountId,
-                amount = amount,
-                description = currentState.description,
-                category = currentState.category,
+                amount = amount, // safe now
+                description = s.description,
+                category = s.category,
                 date = LocalDateTime.now(),
                 sourceMail = AppUserSession.appUser?.mail ?: "",
-                destinationMail = currentState.destinationMail
+                destinationMail = s.destinationMail
             )
-            if (transaction.destinationMail != null) {
-                val isUserExist = userExistsUseCase(transaction.destinationMail)
-                if (!isUserExist) {
-                    _state.value =
-                        currentState.copy(isSubmitting = false, showUserNotExistError = true)
+
+            if (isSendByMail) {
+                val exists = userExistsUseCase(s.destinationMail!!)
+                if (!exists) {
+                    _state.value = s.copy(isSubmitting = false, showUserNotExistError = true)
                     return@launch
                 }
             }
-            insertTransactionUseCase(transaction)
-            _state.value = currentState.copy(
+            insertTransactionUseCase(tx)
+            _state.value = s.copy(
+                destinationMail = "",
                 isSaved = true,
                 isSubmitting = false,
-                showUserNotExistError = false
+                showUserNotExistError = false,
+                showError = false
             )
         }
     }
+
 }

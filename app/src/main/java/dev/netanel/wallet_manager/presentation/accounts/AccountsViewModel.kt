@@ -40,11 +40,15 @@ class AccountsViewModel @Inject constructor(
                 ).collectLatest { accounts ->
                     _state.value = _state.value.copy(accounts = accounts, isLoading = false)
                 }
+
             }
 
 
             launch {
-                accountUseCases.getTotalBalance().collectLatest { total ->
+                accountUseCases.getTotalBalance(
+                    AppUserSession.appUser?.mail
+                        ?: ""
+                ).collectLatest { total ->
                     _state.value = _state.value.copy(totalBalance = total)
                 }
             }

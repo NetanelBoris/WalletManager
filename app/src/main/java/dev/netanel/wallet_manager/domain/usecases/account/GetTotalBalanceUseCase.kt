@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetTotalBalanceUseCase @Inject constructor(
     private val repository: AccountRepository
 ) {
-    operator fun invoke(): Flow<Double> {
-        return repository.getTotalBalance()
+    operator fun invoke(mail: String): Flow<Double> {
+        return repository.getTotalBalance(mail = mail)
     }
 }

@@ -6,5 +6,5 @@ data class Account(
     val name: String,
     val balance: Double,
     val type: AccountType,
-    val managerMail:String
+    val managerMail:String,
 )

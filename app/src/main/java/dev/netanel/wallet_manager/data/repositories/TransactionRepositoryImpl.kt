@@ -18,7 +18,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private val dao: TransactionDao
 ) : TransactionRepository {
 
-    override fun getAllTransactions(mail:String): Flow<List<Transaction>> {
+    override fun getAllTransactions(mail: String): Flow<List<Transaction>> {
         return dao.getAllTransactions(mail).map { list ->
             list.map { it.toDomain() }
         }
@@ -37,6 +37,17 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun deleteTransaction(transaction: Transaction) {
         dao.deleteTransaction(transaction.toEntity())
     }
+
+    override suspend fun getAllUserIncomes(mail: String): Flow<List<Transaction>> {
+        return dao.getAllUserIncomes(mail)
+            .map { list ->
+                list.map { entity ->
+                    val domain = entity.toDomain()
+                    domain.copy(amount = kotlin.math.abs(domain.amount))
+                }
+            }
+    }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -1,6 +1,5 @@
 package dev.netanel.wallet_manager.presentation.registration
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -109,7 +108,7 @@ class RegistrationViewModel @Inject constructor(
             else {
                 appUserUseCases.insertAppUserUseCase(appUser)
                 val account = Account(
-                    id = state.mail + ".#incomes",
+                    id = state.mail + ".incomes",
                     name = "Incomes",
                     balance = 0.0,
                     type = AccountType.EXTERNAL_INCOMES,

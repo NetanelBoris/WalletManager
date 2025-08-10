@@ -58,15 +58,15 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch {
             _state.value = state.copy(isLoggingIn = true, showEmptyFieldsError = false)
-            val appUser = appUserUseCases.getAppUserByMailAndPasswordUseCase(state.mail,state.password)
-            if (appUser!=null) {
-                _state.value = state.copy(isLoggingIn = false, isLoggedIn = true, appUser =appUser)
-            }
-            else  {
+            val appUser =
+                appUserUseCases.getAppUserByMailAndPasswordUseCase(state.mail, state.password)
+            if (appUser != null) {
+
+                _state.value = state.copy(isLoggingIn = false, isLoggedIn = true, appUser = appUser)
+            } else if (appUserUseCases.userExistsUseCase(_state.value.mail)) {
+                _state.value = state.copy(isLoggingIn = false, showUserPassError = true)
+            } else
                 _state.value = state.copy(isLoggingIn = false, showUserNotExistError = true)
-            }
-
-
 
 
         }

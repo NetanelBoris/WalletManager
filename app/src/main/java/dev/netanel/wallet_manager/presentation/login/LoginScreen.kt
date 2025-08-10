@@ -88,6 +88,9 @@ fun LoginScreen(
             if (state.showUserNotExistError) {
                 Text("User not exist", color = Color.Red)
             }
+            if (state.showUserPassError) {
+                Text("One or more details are wrong", color = Color.Red)
+            }
             if (state.showEmptyFieldsError) {
                 Text("Please fill all fields", color = Color.Red)
             }
@@ -110,7 +113,11 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
                     // Navigate to your registration screen
-                    navController.navigate(Routes.REGISTRATION){ popUpTo(Routes.LOGIN) { inclusive = true }}
+                    navController.navigate(Routes.REGISTRATION) {
+                        popUpTo(Routes.LOGIN) {
+                            inclusive = true
+                        }
+                    }
                 },
             ) {
                 Text(

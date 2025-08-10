@@ -113,6 +113,9 @@ fun AddTransactionScreen(
             if (state.showError) {
                 Text("Please make sure all fields are valid", color = Color.Red)
             }
+            if (state.showNegativeAmountError) {
+                Text("You can't transfer negative amount", color = Color.Red)
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -151,7 +154,7 @@ fun TransactionCategoryDropdown(
             onDismissRequest = { expanded = false }
         ) {
             TransactionCategory.entries
-                
+
                 .forEach { category ->
                     DropdownMenuItem(
                         text = { Text(category.name) },

@@ -21,6 +21,7 @@ object LoginContract {
         val showPasswordFormatError: Boolean = false,
         val showEmptyFieldsError: Boolean = false,
         val showUserNotExistError: Boolean = false,
+        val showUserPassError: Boolean = false,
         val appUser: AppUser? =null
 
         )

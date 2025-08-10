@@ -15,14 +15,14 @@ class AccountRepositoryImpl @Inject constructor(
     private val dao: AccountDao
 ) : AccountRepository {
 
-    override fun getAccounts(managerMail:String): Flow<List<Account>> {
+    override fun getAccounts(managerMail: String): Flow<List<Account>> {
         return dao.getAllAccounts(managerMail).map { list ->
             list.map { it.toDomain() }
         }
     }
 
-    override fun getTotalBalance(): Flow<Double> {
-        return dao.getTotalBalance()
+    override fun getTotalBalance(mail: String): Flow<Double> {
+        return dao.getTotalBalance(mail = mail)
     }
 
     override suspend fun insertAccount(account: Account) {
@@ -40,6 +40,18 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun updateAccount(account: Account) {
         dao.updateAccount(account.toAccountEntity())
     }
+
+    override suspend fun getAccountTypeById(accountId: String): AccountType {
+        return AccountType.valueOf(dao.getAccountTypeById(accountId))
+    }
+
+    override suspend fun getAccountManagerMailById(accountId: String): String {
+        return dao.getAccountManagerMailById(accountId)
+    }
+
+    override suspend fun getIncomesAccountByMail(accountMail: String): Account {
+        return dao.getIncomesAccountByMail(mail = accountMail).toAccount()
+    }
 }
 
 private fun AccountEntity.toDomain(): Account {
@@ -48,7 +60,7 @@ private fun AccountEntity.toDomain(): Account {
         name = name,
         balance = balance,
         type = AccountType.valueOf(type),
-        managerMail=managerMail
+        managerMail = managerMail
     )
 }
 
@@ -58,7 +70,7 @@ private fun Account.toEntity(): AccountEntity {
         name = name,
         balance = balance,
         type = type.name,
-        managerMail=managerMail
+        managerMail = managerMail
 
     )
 }

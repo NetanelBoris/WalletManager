@@ -20,11 +20,8 @@ fun AddAccountScreen(
     navController: NavController,
     viewModel: AddAccountViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsState()
     val isFormValid = state.name.isNotBlank() && state.balance.toDoubleOrNull() != null
-
-
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Add Account") })
@@ -47,15 +44,11 @@ fun AddAccountScreen(
                 label = { Text("Account Name") },
                 modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             DropdownMenuTypeSelector(
                 selected = state.type,
                 onSelect = { viewModel.onIntent(AddAccountContract.AddAccountIntent.SelectType(it.name)) })
-
             Spacer(modifier = Modifier.height(8.dp))
-
             OutlinedTextField(
                 value = state.balance,
                 onValueChange = {
@@ -69,7 +62,6 @@ fun AddAccountScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )
-
             if (state.showError && !isFormValid) {
                 Text(
                     text = "Please fill all fields correctly.",
@@ -78,9 +70,7 @@ fun AddAccountScreen(
                     modifier = Modifier.padding(top = 4.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Button(
                 onClick = {
                     if (isFormValid) {
