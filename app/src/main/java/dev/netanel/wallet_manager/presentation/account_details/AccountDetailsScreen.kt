@@ -24,12 +24,9 @@ fun AccountDetailsScreen(
     viewModel: AccountDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-
-    // Trigger load
     LaunchedEffect(Unit) {
         viewModel.onIntent(AccountDetailsContract.AccountDetailsIntent.LoadAccountDetails(accountId))
     }
-
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Account Details") })
@@ -53,9 +50,7 @@ fun AccountDetailsScreen(
                 Text("Type: ${account.type}")
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
             Text("Transactions:", style = MaterialTheme.typography.titleMedium)
-
             LazyColumn {
                 items(state.transactions) { transaction ->
                     TransactionItem(transaction)

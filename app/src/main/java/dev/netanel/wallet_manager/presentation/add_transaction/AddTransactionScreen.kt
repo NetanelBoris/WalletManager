@@ -64,9 +64,7 @@ fun AddTransactionScreen(
                 label = { Text("Description") },
                 modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             TransactionCategoryDropdown(
                 selected = state.category,
                 onSelect = {
@@ -77,7 +75,6 @@ fun AddTransactionScreen(
                     )
                 }
             )
-
             Spacer(modifier = Modifier.height(16.dp))
 
             if (state.category == TransactionCategory.SEND_MONEY_BY_MAIL) {
@@ -100,8 +97,6 @@ fun AddTransactionScreen(
 
 
             }
-
-
             Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -117,9 +112,6 @@ fun AddTransactionScreen(
                 Text("You can't transfer negative amount", color = Color.Red)
             }
             Spacer(modifier = Modifier.height(16.dp))
-
-
-
             Button(
                 onClick = {
                     viewModel.onIntent(
@@ -132,8 +124,6 @@ fun AddTransactionScreen(
             ) {
                 Text("Save")
             }
-
-
         }
     }
 }
@@ -164,7 +154,6 @@ fun TransactionCategoryDropdown(
                         }
                     )
                 }
-
         }
     }
 }

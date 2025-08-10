@@ -1,6 +1,5 @@
 package dev.netanel.wallet_manager.presentation.account_details
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -46,12 +44,6 @@ class AccountDetailsViewModel @Inject constructor(
             if (accountType == AccountType.EXTERNAL_INCOMES) transactionUseCases.getAllUserIncomes(
                 mail
             ) else getTransactionsForAccountUseCase(accountId)
-
-        Log.d("natiloger", accountType.toString() + transactionsFlow.first().toString())
-
-
-
-
         accountFlow
             .combine(transactionsFlow) { account, transactions ->
                 _state.value.copy(

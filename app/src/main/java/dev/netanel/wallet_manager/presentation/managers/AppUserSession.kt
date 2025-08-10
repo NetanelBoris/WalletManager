@@ -16,5 +16,5 @@ object AppUserSession {
         _appUser = null
     }
 
-    fun isLoggedIn(): Boolean = _appUser != null
+//    fun isLoggedIn(): Boolean = _appUser != null // for future use ...
 }

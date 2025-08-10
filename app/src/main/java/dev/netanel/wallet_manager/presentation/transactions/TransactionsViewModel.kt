@@ -23,18 +23,6 @@ class TransactionsViewModel @Inject constructor(
 
     fun onIntent(intent: TransactionsContract.TransactionsIntent) {
         when (intent) {
-//            is TransactionsContract.TransactionsIntent.LoadAll -> {
-//                viewModelScope.launch {
-//                    val allTransactions =
-//                        transactionUseCases.getAllTransactions(AppUserSession.appUser?.mail ?: "")
-//                            .first()
-//                    _state.value = _state.value.copy(
-//                        accounts = intent.accounts,
-//                        allTransactions = allTransactions,
-//                        filteredTransactions = allTransactions
-//                    )
-//                }
-//            }
 
             is TransactionsContract.TransactionsIntent.SelectAccount -> {
                 _state.value = _state.value.copy(selectedAccountId = intent.accountId)
@@ -68,10 +56,6 @@ class TransactionsViewModel @Inject constructor(
                     AppUserSession.appUser?.mail
                         ?: ""
                 ).first()
-//                val incomes = transactionUseCases.getAllUserIncomes(AppUserSession.appUser?.mail
-//                    ?: "").first()
-
-
                 _state.value = _state.value.copy(
                     accounts = accounts,
                     allTransactions = transactions,

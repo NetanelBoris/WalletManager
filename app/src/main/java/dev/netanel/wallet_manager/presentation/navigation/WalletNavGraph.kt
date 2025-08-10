@@ -9,8 +9,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.google.gson.Gson
-import dev.netanel.wallet_manager.domain.models.AppUser
 import dev.netanel.wallet_manager.presentation.accounts.AccountsScreen
 import dev.netanel.wallet_manager.presentation.add_account.AddAccountScreen
 import dev.netanel.wallet_manager.presentation.account_details.AccountDetailsScreen
