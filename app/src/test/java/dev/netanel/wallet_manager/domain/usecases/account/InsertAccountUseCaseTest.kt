@@ -30,7 +30,8 @@ class InsertAccountUseCaseTest {
             id = "acc1",
             name = "Emergency Fund",
             balance = 2500.0,
-            type = AccountType.SAVINGS
+            type = AccountType.SAVINGS,
+            managerMail = "user@example.com"
         )
 
         useCase(account)

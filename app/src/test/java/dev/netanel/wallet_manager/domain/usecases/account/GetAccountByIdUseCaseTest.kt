@@ -22,31 +22,27 @@ class GetAccountByIdUseCaseTest {
         useCase = GetAccountByIdUseCase(repository)
     }
 
-    /**
-     * This test verifies that:
-     * - The use case filters the list of accounts by the given ID.
-     * - The correct account is emitted via the Flow.
-     */
     @Test
     fun `invoke should return flow emitting account with matching id`() = runTest {
         val targetAccount = Account(
             id = "acc2",
             name = "Business",
             balance = 5000.0,
-            type = AccountType.CHECKING
+            type = AccountType.CHECKING,
+            managerMail = "manager2@mail.com"
         )
 
         val allAccounts = listOf(
-            Account("acc1", "Personal", 1000.0, AccountType.SAVINGS),
+            Account("acc1", "Personal", 1000.0, AccountType.SAVINGS, "manager1@mail.com"),
             targetAccount,
-            Account("acc3", "Joint", 750.0, AccountType.CHECKING)
+            Account("acc3", "Joint", 750.0, AccountType.CHECKING, "manager3@mail.com")
         )
 
-        coEvery { repository.getAccounts() } returns flowOf(allAccounts)
+        // Match any managerMail so the test doesn't fail on parameter mismatch
+        coEvery { repository.getAccounts(any()) } returns flowOf(allAccounts)
 
         useCase("acc2").test {
-            val result = awaitItem()
-            assertEquals(targetAccount, result)
+            assertEquals(targetAccount, awaitItem())
             awaitComplete()
         }
     }

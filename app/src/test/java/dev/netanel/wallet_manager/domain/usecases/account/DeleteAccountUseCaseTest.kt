@@ -29,12 +29,14 @@ class DeleteAccountUseCaseTest {
         val account = Account(
             id = "acc1",
             name = "Savings",
+            balance = 1000.0,                 // Double
             type = AccountType.SAVINGS,
-            balance = 1000.0
+            managerMail = "user@mail.com"     // <-- required now
         )
 
         useCase(account)
 
         coVerify { repository.deleteAccount(account) }
     }
+
 }

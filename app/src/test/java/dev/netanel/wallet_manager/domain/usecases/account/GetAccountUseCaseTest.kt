@@ -31,13 +31,13 @@ class GetAccountsUseCaseTest {
     @Test
     fun `invoke should return flow of all accounts`() = runTest {
         val accounts = listOf(
-            Account("acc1", "Personal", 1000.0, AccountType.SAVINGS),
-            Account("acc2", "Business", 5000.0, AccountType.CHECKING)
+            Account("acc1", "Personal", 1000.0, AccountType.SAVINGS, managerMail = "user@example.com"),
+            Account("acc2", "Business", 5000.0, AccountType.CHECKING,managerMail = "user@example.com")
         )
 
-        coEvery { repository.getAccounts() } returns flowOf(accounts)
+        coEvery { repository.getAccounts("user@example.com") } returns flowOf(accounts)
 
-        useCase().test {
+        useCase("user@example.com").test {
             val result = awaitItem()
             assertEquals(accounts, result)
             awaitComplete()

@@ -27,13 +27,16 @@ class GetTotalBalanceUseCaseTest {
      */
     @Test
     fun `invoke should return flow emitting total balance`() = runTest {
+        val mail = "user@mail.com"
         val expectedBalance = 8750.0
-        coEvery { repository.getTotalBalance() } returns flowOf(expectedBalance)
 
-        useCase().test {
+        coEvery { repository.getTotalBalance(mail) } returns flowOf(expectedBalance)
+
+        useCase(mail).test {
             val result = awaitItem()
             assertEquals(expectedBalance, result)
             awaitComplete()
         }
     }
+
 }
